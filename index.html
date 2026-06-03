@@ -181,14 +181,8 @@
         }
 
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .info-card {
@@ -257,23 +251,19 @@
         .pixel-list { list-style: none; padding-left: 0; }
         .pixel-list li::before { content: "► "; color: #2ecc2e; }
 
-        /* Easter egg spaceship logo */
         .easter-egg {
             text-align: center;
             margin-top: 30px;
             cursor: pointer;
             transition: transform 0.1s ease;
         }
-        .easter-egg:active {
-            transform: scale(0.9);
-        }
+        .easter-egg:active { transform: scale(0.9); }
         .spaceship-icon {
             font-size: 42px;
             filter: drop-shadow(0 0 4px #0f0);
             display: inline-block;
         }
 
-        /* Mini game overlay - mobile friendly */
         .game-overlay {
             position: fixed;
             top: 0;
@@ -430,7 +420,7 @@
     </div>
 </div>
 
-<!-- MINI GAME OVERLAY with MOBILE CONTROLS -->
+<!-- MINI GAME OVERLAY with HEALTH -->
 <div id="gameOverlay" class="game-overlay">
     <canvas id="gameCanvas" class="game-canvas" width="800" height="500"></canvas>
     <div class="game-controls">
@@ -579,7 +569,7 @@
         });
     });
 
-    // ---------- SPACESHIP MINI GAME (MOBILE + TOUCH) ----------
+    // ---------- SPACESHIP MINI GAME (HEALTH + SLOWER METEORS) ----------
     const egg = document.getElementById('spaceshipEgg');
     const overlay = document.getElementById('gameOverlay');
     const gameCanvas = document.getElementById('gameCanvas');
@@ -595,10 +585,9 @@
     let bullets = [];
     let meteors = [];
     let score = 0;
+    let health = 100;
     let shootCooldown = 0;
-    // Touch/mouse movement flags
-    let leftPressed = false, rightPressed = false;
-    let shootPressed = false;
+    let leftPressed = false, rightPressed = false, shootPressed = false;
 
     function initGame() {
         ship.x = gameCanvas.width/2;
@@ -606,6 +595,7 @@
         bullets = [];
         meteors = [];
         score = 0;
+        health = 100;
         shootCooldown = 0;
         leftPressed = false;
         rightPressed = false;
@@ -614,42 +604,46 @@
     }
 
     function spawnMeteor() {
-        let size = 20 + Math.random() * 20;
+        let size = 18 + Math.random() * 18;  // slightly smaller
+        let speed = 1.2 + Math.random() * 2.0; // slower: 1.2 to 3.2
         meteors.push({
             x: Math.random() * (gameCanvas.width - size),
             y: -size,
             width: size,
             height: size,
-            speed: 2 + Math.random() * 3
+            speed: speed
         });
     }
 
     function updateGame() {
         if (!gameRunning) return;
-        // Mobile/desktop movement
-        if (leftPressed && ship.x > 5) ship.x -= 7;
-        if (rightPressed && ship.x < gameCanvas.width - ship.width - 5) ship.x += 7;
-        // Shooting (cooldown + either keyboard Space or shoot button)
+        // movement
+        if (leftPressed && ship.x > 5) ship.x -= 6;
+        if (rightPressed && ship.x < gameCanvas.width - ship.width - 5) ship.x += 6;
+        // shooting
         if (shootCooldown <= 0 && shootPressed) {
             bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, w: 6, h: 12 });
             shootCooldown = 12;
         }
         if (shootCooldown > 0) shootCooldown--;
 
-        // Update bullets
+        // bullets
         for(let i=0; i<bullets.length; i++) {
             bullets[i].y -= 8;
             if(bullets[i].y + bullets[i].h < 0) bullets.splice(i,1);
         }
-        // Update meteors
+        // meteors update + bottom damage
         for(let i=0; i<meteors.length; i++) {
             meteors[i].y += meteors[i].speed;
-            if(meteors[i].y > gameCanvas.height + 100) {
+            if(meteors[i].y > gameCanvas.height + 50) {
                 meteors.splice(i,1);
+                health -= 10;
+                if(health <= 0) { gameRunning = false; endGame(); return; }
                 spawnMeteor();
+                i--;
             }
         }
-        // Collision bullets vs meteors
+        // collision bullets vs meteors
         for(let i=0; i<bullets.length; i++) {
             for(let j=0; j<meteors.length; j++) {
                 let b = bullets[i], m = meteors[j];
@@ -662,20 +656,28 @@
                 }
             }
         }
-        // Collision ship vs meteors
+        // collision ship vs meteors (deduct health, remove meteor)
         for(let i=0; i<meteors.length; i++) {
             let m = meteors[i];
             if(ship.x < m.x+m.width && ship.x+ship.width > m.x && ship.y < m.y+m.height && ship.y+ship.height > m.y) {
-                gameRunning = false;
-                if(animationId) cancelAnimationFrame(animationId);
-                alert("GAME OVER! Score: " + score);
-                overlay.style.display = 'none';
-                return;
+                meteors.splice(i,1);
+                health -= 10;
+                if(health <= 0) { gameRunning = false; endGame(); return; }
+                spawnMeteor();
+                i--;
             }
         }
+        // keep meteor count ~6
         while(meteors.length < 6) spawnMeteor();
         drawGame();
         animationId = requestAnimationFrame(updateGame);
+    }
+
+    function endGame() {
+        if(animationId) cancelAnimationFrame(animationId);
+        alert("GAME OVER! Score: " + score);
+        overlay.style.display = 'none';
+        gameRunning = false;
     }
 
     function drawGame() {
@@ -702,17 +704,18 @@
             ctxGame.fillStyle = "#744";
             ctxGame.fillRect(m.x+4, m.y+4, m.width-8, m.height-8);
         }
+        // UI
         ctxGame.font = "20px 'Courier New'";
         ctxGame.fillStyle = "#0f0";
         ctxGame.fillText("SCORE: "+score, 10, 30);
+        ctxGame.fillStyle = "#ff8888";
+        ctxGame.fillText("HEALTH: "+health, 10, 60);
     }
 
     function startGame() {
         if(animationId) cancelAnimationFrame(animationId);
-        // resize canvas to maintain aspect ratio but keep consistent dimensions
         gameCanvas.width = 800;
         gameCanvas.height = 500;
-        // reset ship position based on new width
         ship.width = 32;
         ship.height = 32;
         initGame();
@@ -721,7 +724,7 @@
         updateGame();
     }
 
-    // Event listeners for buttons (mobile & desktop)
+    // Button listeners
     leftBtn.addEventListener('mousedown', (e) => { e.preventDefault(); leftPressed = true; });
     leftBtn.addEventListener('mouseup', () => { leftPressed = false; });
     leftBtn.addEventListener('mouseleave', () => { leftPressed = false; });
@@ -740,7 +743,6 @@
     shootBtn.addEventListener('touchstart', (e) => { e.preventDefault(); shootPressed = true; });
     shootBtn.addEventListener('touchend', () => { shootPressed = false; });
 
-    // Also keep keyboard support
     window.addEventListener('keydown', (e) => {
         if(overlay.style.display === 'flex') {
             if(e.key === 'ArrowLeft') { leftPressed = true; e.preventDefault(); }
