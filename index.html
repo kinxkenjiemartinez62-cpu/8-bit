@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>ATOM DRIFT // KENJIE 8-BIT</title>
+    <title>KENJIE'S PORTFOLIO // ATOM DRIFT</title>
     <style>
         * {
             margin: 0;
@@ -11,13 +11,12 @@
             box-sizing: border-box;
         }
 
-        /* FULL SCROLLABLE PAGE — mobile fix */
         html, body {
             width: 100%;
             min-height: 100vh;
             overflow-x: hidden;
             overflow-y: auto !important;
-            background: #050805;
+            background: #030603;
             position: relative;
         }
 
@@ -29,7 +28,6 @@
             padding: 20px 16px;
         }
 
-        /* FIXED PARTICLE CANVAS (background) */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -41,44 +39,41 @@
             display: block;
         }
 
-        /* LIQUID GLASS CONTAINER — scrolls naturally */
         .retro-container {
             position: relative;
             z-index: 2;
             max-width: 1100px;
             width: 100%;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(46, 204, 46, 0.7);
-            border-radius: 24px;
-            padding: 20px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(46, 204, 46, 0.6);
+            border-radius: 28px;
+            padding: 22px;
             margin: 20px 0;
-            transition: all 0.2s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        /* INTRO GLASS */
         .intro-screen {
             text-align: center;
             padding: 40px 20px;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(6px);
-            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
             border: 1px solid #2ecc2e;
         }
         .intro-screen h1 {
             font-size: clamp(28px, 8vw, 52px);
-            color: #aaffaa;
+            color: #ccffcc;
             text-shadow: 0 0 6px #0f0;
         }
         .pixel-art {
             font-size: 30px;
             line-height: 1.3;
             letter-spacing: 2px;
-            color: #8eff8e;
+            color: #aaffaa;
         }
         .intro-screen button {
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.6);
             border: 2px solid #2ecc2e;
             color: #2ecc2e;
             font-size: 26px;
@@ -91,13 +86,12 @@
             backdrop-filter: blur(4px);
         }
 
-        /* MAIN PORTFOLIO */
         .main-portfolio {
             display: none;
         }
 
         .pixel-header {
-            border-bottom: 2px solid rgba(46,204,46,0.8);
+            border-bottom: 2px solid rgba(46,204,46,0.7);
             padding-bottom: 12px;
             margin-bottom: 24px;
             display: flex;
@@ -106,18 +100,17 @@
             gap: 12px;
         }
         .pixel-header h2 {
-            color: #c6ffc6;
+            color: #e0ffe0;
             font-size: clamp(20px, 6vw, 28px);
         }
         .badge {
-            background: rgba(30,60,30,0.7);
+            background: rgba(30,60,30,0.6);
             padding: 5px 14px;
             border-radius: 30px;
             font-size: 13px;
             border: 1px solid #2ecc2e;
         }
 
-        /* TABS */
         .nav-tabs {
             display: flex;
             flex-wrap: wrap;
@@ -127,9 +120,9 @@
             padding-bottom: 12px;
         }
         .tab-btn {
-            background: rgba(0,0,0,0.55);
+            background: rgba(0,0,0,0.45);
             border: 1px solid #2ecc2e;
-            color: #b3ffb3;
+            color: #d0ffd0;
             font-family: monospace;
             font-size: 16px;
             font-weight: bold;
@@ -137,7 +130,6 @@
             border-radius: 40px;
             backdrop-filter: blur(4px);
             cursor: pointer;
-            transition: 0.05s linear;
         }
         .tab-btn.active {
             background: #2ecc2e;
@@ -145,11 +137,10 @@
             box-shadow: 0 0 10px #0f0;
         }
 
-        /* PANELS */
         .panel {
             display: none;
-            background: rgba(8, 12, 8, 0.7);
-            backdrop-filter: blur(5px);
+            background: rgba(8, 12, 8, 0.55);
+            backdrop-filter: blur(6px);
             border: 1px solid rgba(46,204,46,0.5);
             border-radius: 20px;
             padding: 22px;
@@ -159,18 +150,17 @@
             display: block;
         }
 
-        /* CARDS */
         .info-card {
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.5);
             border-left: 5px solid #2ecc2e;
             padding: 18px;
             margin-bottom: 24px;
             border-radius: 18px;
             backdrop-filter: blur(2px);
-            color: #e0ffe0;
+            color: #f0fff0;
         }
         .info-card h3 {
-            color: #b4ffb4;
+            color: #ccffcc;
             font-size: 22px;
             margin-bottom: 12px;
         }
@@ -180,13 +170,13 @@
             gap: 22px;
         }
         .project-item {
-            background: rgba(0,0,0,0.65);
+            background: rgba(0,0,0,0.6);
             border: 1px solid #2ecc2e;
             border-radius: 18px;
             padding: 16px;
         }
         .project-item h4 {
-            color: #b2ffb2;
+            color: #ccffcc;
             font-size: 20px;
         }
         .project-img {
@@ -195,6 +185,9 @@
             background: #1e2a1eaa;
             border-radius: 14px;
             min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .project-img img {
             max-width: 100%;
@@ -210,15 +203,15 @@
             word-break: break-word;
         }
         .contact-row a, .contact-row span {
-            color: #b0ffb0;
+            color: #c2ffc2;
         }
         hr { border-color: #2ecc2e; margin: 18px 0; }
         .pixel-list { list-style: none; padding-left: 0; }
         .pixel-list li::before { content: "⚛️ "; color: #2ecc2e; }
         input, textarea {
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.7);
             border: 1px solid #2ecc2e;
-            color: #cfffcf;
+            color: #e0ffe0;
             padding: 12px;
             width: 100%;
             font-family: monospace;
@@ -226,7 +219,7 @@
             margin-top: 8px;
         }
         button#sendMsgBtn {
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.6);
             border: 1px solid #0f0;
             color: #0f0;
             padding: 10px 24px;
@@ -241,7 +234,7 @@
             font-size: 11px;
             border-top: 1px solid #2ecc2e70;
             padding-top: 14px;
-            color: #90c090;
+            color: #b0d0b0;
         }
         @media (max-width: 640px) {
             .retro-container { padding: 14px; margin: 10px 0; }
@@ -256,8 +249,8 @@
 <div class="retro-container" id="retroRoot">
     <div id="introScreen" class="intro-screen">
         <div class="pixel-art">⚛️ █░█ █▀▀ █░█ ⚛️<br>█▀█ █▀▀ ▄▀▄<br>▀░▀ ▀▀▀ ▀░▀</div>
-        <h1>⚛️ KENJIE DRIFT ⚛️</h1>
-        <div style="color:#aaffaa; margin:10px;">// ATOMS IN MOTION //</div>
+        <h1>⚛️ KENJIE'S PORTFOLIO ⚛️</h1>
+        <div style="color:#caffca; margin:10px;">// ATOMS IN MOTION //</div>
         <button id="startBtn">▶ START</button>
     </div>
 
@@ -273,50 +266,58 @@
             <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
         </div>
 
-        <!-- INFO PANEL (GITHUB ADDED) -->
+        <!-- INFO PANEL -->
         <div id="infoPanel" class="panel active-panel">
             <div class="info-card">
                 <h3>👤 KENJIE MARTINEZ</h3>
                 <p><strong>BIRTH:</strong> Oct 8, 2010 (Age 16)<br>
                 <strong>SCHOOL:</strong> Don Pablo Memorial SHS (Grad 2027)<br>
                 <strong>CODES:</strong> Python, HTML/CSS/JS, Roblox Lua, animating<br>
-                <strong>GITHUB:</strong> <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank" style="color:#8eff8e;">@kinxkenjiemartinez62-cpu</a> / <strong>@kenjie2cool4school</strong><br>
+                <strong>GITHUB:</strong> <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank" style="color:#aaffaa;">@kinxkenjiemartinez62-cpu</a> / <strong>@kenjie2cool4school</strong><br>
                 <strong>PROJECTS:</strong> Prank Love Site, F.R.I.D.A.Y AI, Enterprising Site, Roblox games</p>
             </div>
             <div class="info-card">
                 <h3>⚛️ DRIFTING ATOMS</h3>
-                <p>Atoms never stay in place — they drift, bounce, and react to your mouse/finger like magnetic fields. No fixed return, continuous Brownian motion.</p>
+                <p>Atoms drift endlessly, react to your finger/mouse, but do NOT block scrolling. Pure liquid glass experience.</p>
             </div>
         </div>
 
-        <!-- PROJECTS (with image placeholders) -->
+        <!-- PROJECTS PANEL (custom image for F.R.I.D.A.Y, NO "add image" card) -->
         <div id="projectsPanel" class="panel">
             <div class="project-grid">
                 <div class="project-item">
                     <h4>💔 PRANK LOVE SITE</h4>
-                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%232ecc2e'/%3E%3Ctext x='20' y='70' fill='black' font-size='14'%3E💔 prank demo%3C/text%3E%3C/svg%3E" alt="prank"></div>
+                    <div class="project-img">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%232ecc2e'/%3E%3Ctext x='20' y='70' fill='black' font-size='14'%3E💔 prank demo%3C/text%3E%3C/svg%3E" alt="prank love site preview">
+                    </div>
                     <p>Fake love generator + jumpscare. HTML/CSS/JS.</p>
                 </div>
                 <div class="project-item">
                     <h4>🤖 F.R.I.D.A.Y AI</h4>
-                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%233366cc'/%3E%3Ctext x='15' y='70' fill='white'%3EF.R.I.D.A.Y%3C/text%3E%3C/svg%3E" alt="friday"></div>
-                    <p>Voice assistant + Python backend, speech recog.</p>
+                    <div class="project-img">
+                        <img src="Screenshot_20260527_173717_Gallery.jpg" alt="F.R.I.D.A.Y AI screenshot">
+                    </div>
+                    <p>Voice assistant + Python backend, speech recognition, web dashboard.</p>
                 </div>
                 <div class="project-item">
                     <h4>🏢 ENTERPRISING SITE</h4>
-                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23aa44aa'/%3E%3Ctext x='10' y='70' fill='white'%3Estartup sim%3C/text%3E%3C/svg%3E" alt="enterprise"></div>
+                    <div class="project-img">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23aa44aa'/%3E%3Ctext x='10' y='70' fill='white'%3Estartup sim%3C/text%3E%3C/svg%3E" alt="enterprising site preview">
+                    </div>
                     <p>Business dashboard, pixel graphs, responsive.</p>
                 </div>
                 <div class="project-item">
                     <h4>🎮 ROBLOX GAMES</h4>
-                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23ff8800'/%3E%3Ctext x='10' y='70' fill='black'%3ERoblox Lua%3C/text%3E%3C/svg%3E" alt="roblox"></div>
-                    <p>Lua scripting, custom animations, obbies.</p>
+                    <div class="project-img">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23ff8800'/%3E%3Ctext x='10' y='70' fill='black'%3ERoblox Lua%3C/text%3E%3C/svg%3E" alt="roblox game preview">
+                    </div>
+                    <p>Lua scripting, custom animations, obbies. 5k+ visits.</p>
                 </div>
             </div>
-            <div class="info-card"><h3>🖼️ ADD REAL IMAGES</h3><p>Replace src in .project-img img with your own local/online images.</p></div>
+            <!-- "ADD REAL IMAGES" card removed as requested -->
         </div>
 
-        <!-- OCCUPATION (Roblox + student) -->
+        <!-- OCCUPATION PANEL -->
         <div id="occupationPanel" class="panel">
             <div class="info-card">
                 <h3>⚛️ OCCUPATION: ROBLOX CREATOR + STUDENT</h3>
@@ -329,7 +330,7 @@
             </div>
         </div>
 
-        <!-- CONTACT PANEL (updated with GitHub) -->
+        <!-- CONTACT PANEL -->
         <div id="contactPanel" class="panel">
             <div class="info-card">
                 <h3>📡 REACH KENJIE</h3>
@@ -345,19 +346,19 @@
                 <p id="formFeedback" style="margin-top:12px;"></p>
             </div>
         </div>
-        <div class="footer-note">[ atoms drift forever | repel from cursor | fully scrollable ]</div>
+        <div class="footer-note">[ atoms drift & repel | scroll fully enabled | liquid glass ]</div>
     </div>
 </div>
 
 <script>
-    // ---------- DRIFTING ATOMS (NO RETURN, CONTINUOUS MOVEMENT) ----------
+    // DRIFTING ATOMS (no scroll block)
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const PARTICLE_COUNT = 70;
+    const PARTICLE_COUNT = 75;
     let mouseX = -10000, mouseY = -10000;
     const REPEL_RADIUS = 110;
-    const DRIFT_STRENGTH = 0.2;   // random walk intensity
+    const DRIFT_STRENGTH = 0.22;
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -368,59 +369,51 @@
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * 1.2;
-            this.vy = (Math.random() - 0.5) * 1.2;
+            this.vx = (Math.random() - 0.5) * 1.3;
+            this.vy = (Math.random() - 0.5) * 1.3;
             this.radius = 5 + Math.random() * 5;
             this.orbitRadius = this.radius + 3;
-            this.hue = 70 + Math.random() * 50; // green / lime
+            this.hue = 70 + Math.random() * 50;
         }
         update() {
-            // mouse repulsion
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.hypot(dx, dy);
             if (dist < REPEL_RADIUS && dist > 0.1) {
                 let angle = Math.atan2(dy, dx);
-                let force = (REPEL_RADIUS - dist) / REPEL_RADIUS * 2.4;
+                let force = (REPEL_RADIUS - dist) / REPEL_RADIUS * 2.5;
                 this.vx += Math.cos(angle) * force;
                 this.vy += Math.sin(angle) * force;
             }
-            // random drift (Brownian)
             this.vx += (Math.random() - 0.5) * DRIFT_STRENGTH;
             this.vy += (Math.random() - 0.5) * DRIFT_STRENGTH;
-            // damping
             this.vx *= 0.98;
             this.vy *= 0.98;
             this.x += this.vx;
             this.y += this.vy;
-            // Wrap around edges (infinite drifting)
-            if (this.x < -20) this.x = canvas.width + 20;
-            if (this.x > canvas.width + 20) this.x = -20;
-            if (this.y < -20) this.y = canvas.height + 20;
-            if (this.y > canvas.height + 20) this.y = -20;
+            if (this.x < -30) this.x = canvas.width + 30;
+            if (this.x > canvas.width + 30) this.x = -30;
+            if (this.y < -30) this.y = canvas.height + 30;
+            if (this.y > canvas.height + 30) this.y = -30;
         }
         draw() {
             ctx.save();
-            // nucleus
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius * 0.7, 0, Math.PI * 2);
             ctx.fillStyle = `hsl(${this.hue}, 85%, 65%)`;
             ctx.fill();
-            // orbit ring
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.orbitRadius, 0, Math.PI * 2);
             ctx.strokeStyle = `hsl(${this.hue}, 80%, 70%)`;
             ctx.lineWidth = 1.3;
             ctx.stroke();
-            // orbiting electron 1
             let angle = Date.now() / 320 * (this.radius % 3 + 1);
             let orbitX = this.x + Math.cos(angle) * this.orbitRadius;
             let orbitY = this.y + Math.sin(angle) * this.orbitRadius;
             ctx.beginPath();
-            ctx.arc(orbitX, orbitY, 2.3, 0, Math.PI * 2);
+            ctx.arc(orbitX, orbitY, 2.2, 0, Math.PI * 2);
             ctx.fillStyle = `hsl(${this.hue + 20}, 90%, 72%)`;
             ctx.fill();
-            // second electron (opposite direction)
             let angle2 = angle * 1.6 + Math.PI;
             let orbitX2 = this.x + Math.cos(angle2) * (this.orbitRadius - 1);
             let orbitY2 = this.y + Math.sin(angle2) * (this.orbitRadius - 1);
@@ -434,25 +427,19 @@
 
     function initParticles() {
         particles = [];
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-            particles.push(new DriftAtom());
-        }
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new DriftAtom());
     }
 
     function animateParticles() {
         if (!ctx) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "rgba(2, 6, 2, 0.2)";
+        ctx.fillStyle = "rgba(3, 6, 3, 0.15)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        for (let p of particles) {
-            p.update();
-            p.draw();
-        }
+        for (let p of particles) { p.update(); p.draw(); }
         requestAnimationFrame(animateParticles);
     }
 
-    // mouse/touch with correct coordinates
-    function updateMousePosition(clientX, clientY) {
+    function updateRepelPosition(clientX, clientY) {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
@@ -460,16 +447,14 @@
             mouseX = (clientX - rect.left) * scaleX;
             mouseY = (clientY - rect.top) * scaleY;
         } else {
-            mouseX = -10000;
-            mouseY = -10000;
+            mouseX = -10000; mouseY = -10000;
         }
     }
 
-    window.addEventListener('mousemove', (e) => updateMousePosition(e.clientX, e.clientY));
+    window.addEventListener('mousemove', (e) => updateRepelPosition(e.clientX, e.clientY));
     window.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        if (e.touches[0]) updateMousePosition(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: false });
+        if (e.touches[0]) updateRepelPosition(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
     window.addEventListener('touchend', () => { mouseX = -10000; mouseY = -10000; });
     window.addEventListener('mouseleave', () => { mouseX = -10000; mouseY = -10000; });
     window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
@@ -478,18 +463,17 @@
     initParticles();
     animateParticles();
 
-    // ---------- PORTFOLIO UI ----------
+    // PORTFOLIO UI
     const introDiv = document.getElementById('introScreen');
     const mainDiv = document.getElementById('mainPortfolio');
     const startBtn = document.getElementById('startBtn');
     startBtn.addEventListener('click', () => {
         introDiv.style.display = 'none';
         mainDiv.style.display = 'block';
-        // force scroll reflow
         document.body.style.overflowY = 'auto';
+        document.documentElement.style.overflowY = 'auto';
     });
 
-    // TABS (occupation panel fix)
     const tabs = document.querySelectorAll('.tab-btn');
     const panels = {
         info: document.getElementById('infoPanel'),
@@ -511,7 +495,6 @@
         });
     });
 
-    // Contact form demo
     const sendMsg = document.getElementById('sendMsgBtn');
     const feedbackSpan = document.getElementById('formFeedback');
     if(sendMsg) {
@@ -532,7 +515,6 @@
         });
     }
 
-    // final scroll insurance (mobile)
     document.body.style.overflowY = 'auto';
     document.documentElement.style.overflowY = 'auto';
 </script>
