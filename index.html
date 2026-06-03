@@ -53,7 +53,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        /* mute button */
         .mute-btn {
             position: absolute;
             top: 20px;
@@ -153,11 +152,16 @@
             border-radius: 40px;
             backdrop-filter: blur(4px);
             cursor: pointer;
+            transition: all 0.1s;
         }
         .tab-btn.active {
             background: #2ecc2e;
             color: #000;
             box-shadow: 0 0 10px #0f0;
+        }
+
+        .panels-container {
+            position: relative;
         }
 
         .panel {
@@ -168,9 +172,23 @@
             border-radius: 20px;
             padding: 22px;
             margin-top: 6px;
+            will-change: opacity, transform;
         }
+
         .panel.active-panel {
             display: block;
+            animation: fadeIn 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .info-card {
@@ -238,18 +256,90 @@
         hr { border-color: #2ecc2e; margin: 18px 0; }
         .pixel-list { list-style: none; padding-left: 0; }
         .pixel-list li::before { content: "► "; color: #2ecc2e; }
-        .footer-note {
-            margin-top: 28px;
+
+        /* Easter egg spaceship logo */
+        .easter-egg {
             text-align: center;
-            font-size: 11px;
-            border-top: 1px solid #2ecc2e70;
-            padding-top: 14px;
-            color: #b0d0b0;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .easter-egg:active {
+            transform: scale(0.9);
+        }
+        .spaceship-icon {
+            font-size: 42px;
+            filter: drop-shadow(0 0 4px #0f0);
+            display: inline-block;
+        }
+
+        /* Mini game overlay - mobile friendly */
+        .game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: default;
+        }
+        .game-canvas {
+            background: #000;
+            border: 4px solid #2ecc2e;
+            box-shadow: 0 0 20px #0f0;
+            cursor: none;
+            width: 90%;
+            max-width: 800px;
+            height: auto;
+        }
+        .game-controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .ctrl-btn {
+            background: #000;
+            border: 2px solid #2ecc2e;
+            color: #2ecc2e;
+            font-family: monospace;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 60px;
+            min-width: 80px;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .ctrl-btn:active {
+            background: #2ecc2e;
+            color: #000;
+            transform: scale(0.95);
+        }
+        .game-close {
+            margin-top: 15px;
+            background: #000;
+            border: 2px solid #ff5555;
+            color: #ff5555;
+            font-family: monospace;
+            font-size: 20px;
+            padding: 6px 18px;
+            cursor: pointer;
         }
         @media (max-width: 640px) {
             .retro-container { padding: 14px; margin: 10px 0; }
             .tab-btn { font-size: 14px; padding: 6px 14px; }
             .mute-btn { width: 36px; height: 36px; font-size: 20px; top: 12px; right: 12px; }
+            .spaceship-icon { font-size: 32px; }
+            .ctrl-btn { font-size: 24px; padding: 8px 16px; min-width: 70px; }
         }
     </style>
 </head>
@@ -258,7 +348,6 @@
 <canvas id="particleCanvas"></canvas>
 
 <div class="retro-container" id="retroRoot">
-    <!-- mute button (hidden until portfolio starts, but we'll show always but functional after music init) -->
     <div id="muteButton" class="mute-btn" style="display:none;">🔊</div>
 
     <div id="introScreen" class="intro-screen">
@@ -280,131 +369,116 @@
             <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
         </div>
 
-        <!-- INFO PANEL -->
-        <div id="infoPanel" class="panel active-panel">
-            <div class="info-card">
-                <h3>👤 KENJIE MARTINEZ</h3>
-                <p><strong>BIRTH:</strong> Oct 8, 2010 (Age 16)<br>
-                <strong>SCHOOL:</strong> Don Pablo Memorial SHS (ICT strand, Grad 2027)<br>
-                <strong>CODES:</strong> Python, HTML/CSS/JS, Roblox Lua, animating<br>
-                <strong>GITHUB:</strong> <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank" style="color:#aaffaa;">@kinxkenjiemartinez62-cpu</a> / <strong>@kenjie2cool4school</strong><br>
-                <strong>PROJECTS:</strong> F.R.I.D.A.Y AI, Enterprising Site, Hypershot (coder/scripting)</p>
+        <div class="panels-container">
+            <div id="infoPanel" class="panel active-panel">
+                <div class="info-card">
+                    <h3>👤 KENJIE MARTINEZ</h3>
+                    <p><strong>BIRTH:</strong> Oct 8, 2010 (Age 16)<br>
+                    <strong>SCHOOL:</strong> Don Pablo Memorial SHS (ICT strand, Grad 2027)<br>
+                    <strong>CODES:</strong> Python, HTML/CSS/JS, Roblox Lua, animating<br>
+                    <strong>GITHUB:</strong> <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank" style="color:#aaffaa;">@kinxkenjiemartinez62-cpu</a> / <strong>@kenjie2cool4school</strong><br>
+                    <strong>PROJECTS:</strong> F.R.I.D.A.Y AI, Enterprising Site, Hypershot (co-dev)</p>
+                </div>
             </div>
-        </div>
-
-        <!-- PROJECTS PANEL with links and Hypershot image -->
-        <div id="projectsPanel" class="panel">
-            <div class="project-grid">
-                <div class="project-item">
-                    <h4>🤖 F.R.I.D.A.Y AI</h4>
-                    <div class="project-img">
-                        <img src="Screenshot_20260527_173717_Gallery.jpg" alt="F.R.I.D.A.Y AI screenshot">
+            <div id="projectsPanel" class="panel">
+                <div class="project-grid">
+                    <div class="project-item">
+                        <h4>🤖 F.R.I.D.A.Y AI</h4>
+                        <div class="project-img"><img src="Screenshot_20260527_173717_Gallery.jpg" alt="F.R.I.D.A.Y AI screenshot"></div>
+                        <p>Voice assistant + Python backend, speech recognition, web dashboard.</p>
                     </div>
-                    <p>Voice assistant + Python backend, speech recognition, web dashboard.</p>
-                </div>
-                <div class="project-item">
-                    <h4>🏢 ENTERPRISING SITE</h4>
-                    <div class="project-img">
-                        <img src="Screenshot_20260603_232525_Chrome.jpg" alt="Enterprise shop screenshot">
+                    <div class="project-item">
+                        <h4>🏢 ENTERPRISING SITE</h4>
+                        <div class="project-img"><img src="Screenshot_20260603_232525_Chrome.jpg" alt="Enterprise shop screenshot"></div>
+                        <p>Business dashboard, e-commerce interface, pixel graphs, fully responsive.</p>
                     </div>
-                    <p>Business dashboard, e-commerce interface, pixel graphs, fully responsive.</p>
+                    <div class="project-item">
+                        <h4>🎮 HYPER SHOT</h4>
+                        <a href="https://www.roblox.com/games/17516596118/Hypershot" target="_blank" rel="noopener noreferrer">
+                            <div class="project-img"><img src="noFilter.webp" alt="Hypershot thumbnail"></div>
+                            <p>Co-developed Roblox game – coding mechanics, UI, animations. Click image to play.</p>
+                        </a>
+                    </div>
                 </div>
-                <div class="project-item">
-                    <h4>🎮 HYPER SHOT</h4>
-                    <a href="https://www.roblox.com/games/17516596118/Hypershot" target="_blank" rel="noopener noreferrer">
-                        <div class="project-img">
-                            <img src="noFilter.webp" alt="Hypershot thumbnail">
-                        </div>
-                        <p>Co-developed Roblox game – coding mechanics, UI, animations. Click image to play.</p>
-                    </a>
+            </div>
+            <div id="occupationPanel" class="panel">
+                <div class="info-card">
+                    <h3>⚛️ OCCUPATION: ICT STUDENT + HELPER CODER</h3>
+                    <ul class="pixel-list">
+                        <li>Student at Don Pablo Memorial SHS – ICT strand (graduating 2027)</li>
+                        <li>Roblox scripting & animating – assisted in Hypershot project</li>
+                        <li>Freelance web dev & AI prototyping</li>
+                        <li>Learning full-stack development</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="contactPanel" class="panel">
+                <div class="info-card">
+                    <h3>📡 REACH KENJIE</h3>
+                    <div class="contact-row">📧 EMAIL: <a href="mailto:kinxkenjiemartinez62@gmail.com">kinxkenjiemartinez62@gmail.com</a></div>
+                    <div class="contact-row">📞 PHONE: 09947098814</div>
+                    <div class="contact-row">🐙 GITHUB: <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank">github.com/kinxkenjiemartinez62-cpu</a> / @kenjie2cool4school</div>
+                    <div class="contact-row">💬 DISCORD: @VcTomato</div>
+                    <div class="contact-row">📘 FACEBOOK: Kinx Kenjie Alt</div>
                 </div>
             </div>
         </div>
 
-        <!-- OCCUPATION PANEL (ICT, Hypershot helper) -->
-        <div id="occupationPanel" class="panel">
-            <div class="info-card">
-                <h3>⚛️ OCCUPATION: ICT STUDENT + HELPER CODER</h3>
-                <ul class="pixel-list">
-                    <li>Student at Don Pablo Memorial SHS – ICT strand (graduating 2027)</li>
-                    <li>Roblox scripting & animating – assisted in Hypershot project</li>
-                    <li>Freelance web dev & AI prototyping</li>
-                    <li>Learning full-stack development</li>
-                </ul>
-            </div>
+        <div class="easter-egg" id="spaceshipEgg">
+            <div class="spaceship-icon">🛸✨</div>
         </div>
-
-        <!-- CONTACT PANEL (no send message form, only contact info) -->
-        <div id="contactPanel" class="panel">
-            <div class="info-card">
-                <h3>📡 REACH KENJIE</h3>
-                <div class="contact-row">📧 EMAIL: <a href="mailto:kinxkenjiemartinez62@gmail.com">kinxkenjiemartinez62@gmail.com</a></div>
-                <div class="contact-row">📞 PHONE: 09947098814</div>
-                <div class="contact-row">🐙 GITHUB: <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank">github.com/kinxkenjiemartinez62-cpu</a> / @kenjie2cool4school</div>
-                <div class="contact-row">💬 DISCORD: @VcTomato</div>
-                <div class="contact-row">📘 FACEBOOK: Kinx Kenjie Alt</div>
-                <!-- no form, no send button -->
-            </div>
-        </div>
-        <div class="footer-note">[ liquid glass | scroll enabled | atoms repel from cursor | music by Stardust ]</div>
     </div>
 </div>
 
-<!-- audio element -->
+<!-- MINI GAME OVERLAY with MOBILE CONTROLS -->
+<div id="gameOverlay" class="game-overlay">
+    <canvas id="gameCanvas" class="game-canvas" width="800" height="500"></canvas>
+    <div class="game-controls">
+        <button class="ctrl-btn" id="moveLeftBtn">◀ LEFT</button>
+        <button class="ctrl-btn" id="moveRightBtn">RIGHT ▶</button>
+        <button class="ctrl-btn" id="shootBtn">🔥 SHOOT</button>
+    </div>
+    <button id="closeGame" class="game-close">✖ CLOSE GAME</button>
+</div>
+
 <audio id="bgMusic" loop preload="auto">
     <source src="stardust-music-sounds-better-with-you.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
 </audio>
 
 <script>
-    // ---------- MUSIC HANDLER with mute button ----------
+    // ---------- MUSIC ----------
     const audio = document.getElementById('bgMusic');
     const muteBtn = document.getElementById('muteButton');
     let musicStarted = false;
     let isMuted = false;
-
     function startMusic() {
         if (!musicStarted) {
             audio.play().then(() => {
                 musicStarted = true;
                 muteBtn.style.display = 'flex';
-            }).catch(e => console.log("Autoplay prevented, user interaction needed"));
+            }).catch(e => console.log("autoplay blocked"));
         }
     }
-
     function toggleMute() {
         if (!musicStarted) return;
-        if (isMuted) {
-            audio.volume = 1.0;
-            muteBtn.innerHTML = '🔊';
-            isMuted = false;
-        } else {
-            audio.volume = 0.0;
-            muteBtn.innerHTML = '🔇';
-            isMuted = true;
-        }
+        if (isMuted) { audio.volume = 1.0; muteBtn.innerHTML = '🔊'; isMuted = false; }
+        else { audio.volume = 0.0; muteBtn.innerHTML = '🔇'; isMuted = true; }
     }
-
     muteBtn.addEventListener('click', toggleMute);
 
-    // ---------- DRIFTING ATOMS (no scroll block) ----------
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
+    // ---------- ATOMS (unchanged) ----------
+    const canvasBg = document.getElementById('particleCanvas');
+    const ctxBg = canvasBg.getContext('2d');
     let particles = [];
     const PARTICLE_COUNT = 75;
     let mouseX = -10000, mouseY = -10000;
     const REPEL_RADIUS = 110;
     const DRIFT_STRENGTH = 0.22;
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-
+    function resizeCanvas() { canvasBg.width = window.innerWidth; canvasBg.height = window.innerHeight; }
     class DriftAtom {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
+            this.x = Math.random() * canvasBg.width;
+            this.y = Math.random() * canvasBg.height;
             this.vx = (Math.random() - 0.5) * 1.3;
             this.vy = (Math.random() - 0.5) * 1.3;
             this.radius = 5 + Math.random() * 5;
@@ -412,8 +486,7 @@
             this.hue = 70 + Math.random() * 50;
         }
         update() {
-            let dx = this.x - mouseX;
-            let dy = this.y - mouseY;
+            let dx = this.x - mouseX, dy = this.y - mouseY;
             let dist = Math.hypot(dx, dy);
             if (dist < REPEL_RADIUS && dist > 0.1) {
                 let angle = Math.atan2(dy, dx);
@@ -423,99 +496,67 @@
             }
             this.vx += (Math.random() - 0.5) * DRIFT_STRENGTH;
             this.vy += (Math.random() - 0.5) * DRIFT_STRENGTH;
-            this.vx *= 0.98;
-            this.vy *= 0.98;
-            this.x += this.vx;
-            this.y += this.vy;
-            if (this.x < -30) this.x = canvas.width + 30;
-            if (this.x > canvas.width + 30) this.x = -30;
-            if (this.y < -30) this.y = canvas.height + 30;
-            if (this.y > canvas.height + 30) this.y = -30;
+            this.vx *= 0.98; this.vy *= 0.98;
+            this.x += this.vx; this.y += this.vy;
+            if (this.x < -30) this.x = canvasBg.width + 30;
+            if (this.x > canvasBg.width + 30) this.x = -30;
+            if (this.y < -30) this.y = canvasBg.height + 30;
+            if (this.y > canvasBg.height + 30) this.y = -30;
         }
         draw() {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius * 0.7, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(${this.hue}, 85%, 65%)`;
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.orbitRadius, 0, Math.PI * 2);
-            ctx.strokeStyle = `hsl(${this.hue}, 80%, 70%)`;
-            ctx.lineWidth = 1.3;
-            ctx.stroke();
+            ctxBg.save();
+            ctxBg.beginPath(); ctxBg.arc(this.x, this.y, this.radius * 0.7, 0, Math.PI * 2);
+            ctxBg.fillStyle = `hsl(${this.hue}, 85%, 65%)`; ctxBg.fill();
+            ctxBg.beginPath(); ctxBg.arc(this.x, this.y, this.orbitRadius, 0, Math.PI * 2);
+            ctxBg.strokeStyle = `hsl(${this.hue}, 80%, 70%)`; ctxBg.lineWidth = 1.3; ctxBg.stroke();
             let angle = Date.now() / 320 * (this.radius % 3 + 1);
             let orbitX = this.x + Math.cos(angle) * this.orbitRadius;
             let orbitY = this.y + Math.sin(angle) * this.orbitRadius;
-            ctx.beginPath();
-            ctx.arc(orbitX, orbitY, 2.2, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(${this.hue + 20}, 90%, 72%)`;
-            ctx.fill();
+            ctxBg.beginPath(); ctxBg.arc(orbitX, orbitY, 2.2, 0, Math.PI * 2);
+            ctxBg.fillStyle = `hsl(${this.hue + 20}, 90%, 72%)`; ctxBg.fill();
             let angle2 = angle * 1.6 + Math.PI;
             let orbitX2 = this.x + Math.cos(angle2) * (this.orbitRadius - 1);
             let orbitY2 = this.y + Math.sin(angle2) * (this.orbitRadius - 1);
-            ctx.beginPath();
-            ctx.arc(orbitX2, orbitY2, 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = `#bcff9e`;
-            ctx.fill();
-            ctx.restore();
+            ctxBg.beginPath(); ctxBg.arc(orbitX2, orbitY2, 1.8, 0, Math.PI * 2);
+            ctxBg.fillStyle = `#bcff9e`; ctxBg.fill();
+            ctxBg.restore();
         }
     }
-
-    function initParticles() {
-        particles = [];
-        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new DriftAtom());
-    }
-
+    function initParticles() { particles = []; for (let i=0; i<PARTICLE_COUNT; i++) particles.push(new DriftAtom()); }
     function animateParticles() {
-        if (!ctx) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "rgba(3, 6, 3, 0.15)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (!ctxBg) return;
+        ctxBg.clearRect(0, 0, canvasBg.width, canvasBg.height);
+        ctxBg.fillStyle = "rgba(3, 6, 3, 0.15)";
+        ctxBg.fillRect(0, 0, canvasBg.width, canvasBg.height);
         for (let p of particles) { p.update(); p.draw(); }
         requestAnimationFrame(animateParticles);
     }
-
     function updateRepelPosition(clientX, clientY) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
+        const rect = canvasBg.getBoundingClientRect();
+        const scaleX = canvasBg.width / rect.width;
+        const scaleY = canvasBg.height / rect.height;
         if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
             mouseX = (clientX - rect.left) * scaleX;
             mouseY = (clientY - rect.top) * scaleY;
-        } else {
-            mouseX = -10000; mouseY = -10000;
-        }
+        } else { mouseX = -10000; mouseY = -10000; }
     }
-
     window.addEventListener('mousemove', (e) => updateRepelPosition(e.clientX, e.clientY));
-    window.addEventListener('touchmove', (e) => {
-        if (e.touches[0]) updateRepelPosition(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
+    window.addEventListener('touchmove', (e) => { if (e.touches[0]) updateRepelPosition(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
     window.addEventListener('touchend', () => { mouseX = -10000; mouseY = -10000; });
     window.addEventListener('mouseleave', () => { mouseX = -10000; mouseY = -10000; });
     window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+    resizeCanvas(); initParticles(); animateParticles();
 
-    resizeCanvas();
-    initParticles();
-    animateParticles();
-
-    // ---------- PORTFOLIO UI + start music on user interaction ----------
+    // ---------- PORTFOLIO UI ----------
     const introDiv = document.getElementById('introScreen');
     const mainDiv = document.getElementById('mainPortfolio');
     const startBtn = document.getElementById('startBtn');
-
-    function startPortfolio() {
+    startBtn.addEventListener('click', () => {
         introDiv.style.display = 'none';
         mainDiv.style.display = 'block';
         document.body.style.overflowY = 'auto';
-        document.documentElement.style.overflowY = 'auto';
-        startMusic();  // attempts to play music after user click
-    }
-
-    startBtn.addEventListener('click', startPortfolio);
-
-    // also if user clicks anywhere else (tab, etc) after intro, but we already have start. 
-    // additional safety: any click on portfolio after start will not restart music.
+        startMusic();
+    });
 
     const tabs = document.querySelectorAll('.tab-btn');
     const panels = {
@@ -536,6 +577,190 @@
             const tab = btn.getAttribute('data-tab');
             if(tab && panels[tab]) activateTab(tab);
         });
+    });
+
+    // ---------- SPACESHIP MINI GAME (MOBILE + TOUCH) ----------
+    const egg = document.getElementById('spaceshipEgg');
+    const overlay = document.getElementById('gameOverlay');
+    const gameCanvas = document.getElementById('gameCanvas');
+    const ctxGame = gameCanvas.getContext('2d');
+    const closeGame = document.getElementById('closeGame');
+    const leftBtn = document.getElementById('moveLeftBtn');
+    const rightBtn = document.getElementById('moveRightBtn');
+    const shootBtn = document.getElementById('shootBtn');
+
+    let gameRunning = false;
+    let animationId = null;
+    let ship = { x: 0, y: 0, width: 32, height: 32 };
+    let bullets = [];
+    let meteors = [];
+    let score = 0;
+    let shootCooldown = 0;
+    // Touch/mouse movement flags
+    let leftPressed = false, rightPressed = false;
+    let shootPressed = false;
+
+    function initGame() {
+        ship.x = gameCanvas.width/2;
+        ship.y = gameCanvas.height - 50;
+        bullets = [];
+        meteors = [];
+        score = 0;
+        shootCooldown = 0;
+        leftPressed = false;
+        rightPressed = false;
+        shootPressed = false;
+        for(let i=0; i<6; i++) spawnMeteor();
+    }
+
+    function spawnMeteor() {
+        let size = 20 + Math.random() * 20;
+        meteors.push({
+            x: Math.random() * (gameCanvas.width - size),
+            y: -size,
+            width: size,
+            height: size,
+            speed: 2 + Math.random() * 3
+        });
+    }
+
+    function updateGame() {
+        if (!gameRunning) return;
+        // Mobile/desktop movement
+        if (leftPressed && ship.x > 5) ship.x -= 7;
+        if (rightPressed && ship.x < gameCanvas.width - ship.width - 5) ship.x += 7;
+        // Shooting (cooldown + either keyboard Space or shoot button)
+        if (shootCooldown <= 0 && shootPressed) {
+            bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, w: 6, h: 12 });
+            shootCooldown = 12;
+        }
+        if (shootCooldown > 0) shootCooldown--;
+
+        // Update bullets
+        for(let i=0; i<bullets.length; i++) {
+            bullets[i].y -= 8;
+            if(bullets[i].y + bullets[i].h < 0) bullets.splice(i,1);
+        }
+        // Update meteors
+        for(let i=0; i<meteors.length; i++) {
+            meteors[i].y += meteors[i].speed;
+            if(meteors[i].y > gameCanvas.height + 100) {
+                meteors.splice(i,1);
+                spawnMeteor();
+            }
+        }
+        // Collision bullets vs meteors
+        for(let i=0; i<bullets.length; i++) {
+            for(let j=0; j<meteors.length; j++) {
+                let b = bullets[i], m = meteors[j];
+                if(b.x < m.x+m.width && b.x+b.w > m.x && b.y < m.y+m.height && b.y+b.h > m.y) {
+                    bullets.splice(i,1);
+                    meteors.splice(j,1);
+                    score++;
+                    spawnMeteor();
+                    break;
+                }
+            }
+        }
+        // Collision ship vs meteors
+        for(let i=0; i<meteors.length; i++) {
+            let m = meteors[i];
+            if(ship.x < m.x+m.width && ship.x+ship.width > m.x && ship.y < m.y+m.height && ship.y+ship.height > m.y) {
+                gameRunning = false;
+                if(animationId) cancelAnimationFrame(animationId);
+                alert("GAME OVER! Score: " + score);
+                overlay.style.display = 'none';
+                return;
+            }
+        }
+        while(meteors.length < 6) spawnMeteor();
+        drawGame();
+        animationId = requestAnimationFrame(updateGame);
+    }
+
+    function drawGame() {
+        ctxGame.clearRect(0,0,gameCanvas.width,gameCanvas.height);
+        // stars
+        ctxGame.fillStyle = "#fff";
+        for(let i=0;i<100;i++) ctxGame.fillRect((i*23)%gameCanvas.width, (i*7)%gameCanvas.height, 1,1);
+        // ship
+        ctxGame.fillStyle = "#0f0";
+        ctxGame.beginPath();
+        ctxGame.moveTo(ship.x+ship.width/2, ship.y);
+        ctxGame.lineTo(ship.x+ship.width-6, ship.y+ship.height);
+        ctxGame.lineTo(ship.x+6, ship.y+ship.height);
+        ctxGame.fill();
+        ctxGame.fillStyle = "#ff0";
+        ctxGame.fillRect(ship.x+12, ship.y-4, 8, 6);
+        // bullets
+        ctxGame.fillStyle = "#f00";
+        for(let b of bullets) ctxGame.fillRect(b.x, b.y, b.w, b.h);
+        // meteors
+        for(let m of meteors) {
+            ctxGame.fillStyle = "#a55";
+            ctxGame.fillRect(m.x, m.y, m.width, m.height);
+            ctxGame.fillStyle = "#744";
+            ctxGame.fillRect(m.x+4, m.y+4, m.width-8, m.height-8);
+        }
+        ctxGame.font = "20px 'Courier New'";
+        ctxGame.fillStyle = "#0f0";
+        ctxGame.fillText("SCORE: "+score, 10, 30);
+    }
+
+    function startGame() {
+        if(animationId) cancelAnimationFrame(animationId);
+        // resize canvas to maintain aspect ratio but keep consistent dimensions
+        gameCanvas.width = 800;
+        gameCanvas.height = 500;
+        // reset ship position based on new width
+        ship.width = 32;
+        ship.height = 32;
+        initGame();
+        gameRunning = true;
+        overlay.style.display = 'flex';
+        updateGame();
+    }
+
+    // Event listeners for buttons (mobile & desktop)
+    leftBtn.addEventListener('mousedown', (e) => { e.preventDefault(); leftPressed = true; });
+    leftBtn.addEventListener('mouseup', () => { leftPressed = false; });
+    leftBtn.addEventListener('mouseleave', () => { leftPressed = false; });
+    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); leftPressed = true; });
+    leftBtn.addEventListener('touchend', () => { leftPressed = false; });
+
+    rightBtn.addEventListener('mousedown', (e) => { e.preventDefault(); rightPressed = true; });
+    rightBtn.addEventListener('mouseup', () => { rightPressed = false; });
+    rightBtn.addEventListener('mouseleave', () => { rightPressed = false; });
+    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); rightPressed = true; });
+    rightBtn.addEventListener('touchend', () => { rightPressed = false; });
+
+    shootBtn.addEventListener('mousedown', (e) => { e.preventDefault(); shootPressed = true; });
+    shootBtn.addEventListener('mouseup', () => { shootPressed = false; });
+    shootBtn.addEventListener('mouseleave', () => { shootPressed = false; });
+    shootBtn.addEventListener('touchstart', (e) => { e.preventDefault(); shootPressed = true; });
+    shootBtn.addEventListener('touchend', () => { shootPressed = false; });
+
+    // Also keep keyboard support
+    window.addEventListener('keydown', (e) => {
+        if(overlay.style.display === 'flex') {
+            if(e.key === 'ArrowLeft') { leftPressed = true; e.preventDefault(); }
+            if(e.key === 'ArrowRight') { rightPressed = true; e.preventDefault(); }
+            if(e.key === ' ') { shootPressed = true; e.preventDefault(); }
+        }
+    });
+    window.addEventListener('keyup', (e) => {
+        if(overlay.style.display === 'flex') {
+            if(e.key === 'ArrowLeft') leftPressed = false;
+            if(e.key === 'ArrowRight') rightPressed = false;
+            if(e.key === ' ') shootPressed = false;
+        }
+    });
+
+    egg.addEventListener('click', (e) => { e.stopPropagation(); startGame(); });
+    closeGame.addEventListener('click', () => {
+        gameRunning = false;
+        if(animationId) cancelAnimationFrame(animationId);
+        overlay.style.display = 'none';
     });
 
     document.body.style.overflowY = 'auto';
