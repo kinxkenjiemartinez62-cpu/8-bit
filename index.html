@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>8-BIT PORTFOLIO // KENJIE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
+
+        body {
+            background: #0a0c0a;
+            font-family: 'Courier New', 'VT323', 'Fira Code', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+        }
+
+        /* 8-bit container */
+        .retro-container {
+            max-width: 1100px;
+            width: 100%;
+            background: #000000;
+            border: 4px solid #2ecc2e;
+            box-shadow: 6px 6px 0 #0f3f0f;
+            padding: 16px;
+            transition: all 0.1s ease;
+        }
+
+        /* INTRO SCREEN */
+        .intro-screen {
+            text-align: center;
+            padding: 30px 16px;
+            background: #000;
+            border: 2px solid #2ecc2e;
+        }
+        .intro-screen h1 {
+            font-size: clamp(28px, 8vw, 48px);
+            color: #2ecc2e;
+            text-shadow: 3px 3px 0 #0a4f0a;
+            letter-spacing: 2px;
+            word-break: break-word;
+        }
+        .pixel-art {
+            font-size: 32px;
+            line-height: 1.2;
+            letter-spacing: 4px;
+            margin: 16px 0;
+        }
+        .intro-screen button {
+            background: #000;
+            border: 3px solid #2ecc2e;
+            color: #2ecc2e;
+            font-size: 24px;
+            font-family: monospace;
+            font-weight: bold;
+            padding: 10px 28px;
+            margin-top: 20px;
+            cursor: pointer;
+            width: auto;
+            min-width: 160px;
+        }
+        .intro-screen button:active {
+            transform: scale(0.96);
+        }
+
+        /* MAIN PORTFOLIO */
+        .main-portfolio {
+            display: none;
+        }
+
+        /* header */
+        .pixel-header {
+            border-bottom: 3px solid #2ecc2e;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+        }
+        .pixel-header h2 {
+            color: #2ecc2e;
+            font-size: clamp(20px, 6vw, 28px);
+            letter-spacing: 1px;
+        }
+        .badge {
+            background: #1a2a1a;
+            color: #8aff8a;
+            padding: 4px 10px;
+            font-size: 12px;
+            border: 1px solid #2ecc2e;
+        }
+
+        /* navigation tabs: touch friendly */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #2ecc2e;
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: #000;
+            border: 2px solid #2ecc2e;
+            color: #2ecc2e;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 8px 18px;
+            cursor: pointer;
+            min-height: 44px;
+            transition: 0.05s linear;
+        }
+        .tab-btn.active {
+            background: #2ecc2e;
+            color: #000;
+        }
+        .tab-btn:active {
+            transform: translate(2px, 2px);
+        }
+
+        /* panels */
+        .panel {
+            display: none;
+            background: #0a100a;
+            border: 2px solid #2ecc2e;
+            padding: 18px;
+            margin-top: 8px;
+            min-height: 400px;
+        }
+        .panel.active-panel {
+            display: block;
+        }
+
+        /* cards */
+        .info-card {
+            background: #000;
+            border-left: 8px solid #2ecc2e;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: #b3ffb3;
+            word-break: break-word;
+        }
+        .info-card h3 {
+            color: #2ecc2e;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        .info-card p, .info-card li {
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        .project-item {
+            background: #000;
+            border: 2px solid #2ecc2e;
+            padding: 16px;
+            transition: 0.05s linear;
+        }
+        .project-item:active {
+            transform: translate(2px, 2px);
+        }
+        .project-item h4 {
+            color: #2ecc2e;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .contact-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .contact-row a {
+            color: #2ecc2e;
+            text-decoration: none;
+            border-bottom: 2px dotted #2ecc2e;
+            word-break: break-all;
+        }
+        hr {
+            border-color: #2ecc2e;
+            margin: 16px 0;
+        }
+        .pixel-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .pixel-list li::before {
+            content: "► ";
+            color: #2ecc2e;
+        }
+        .footer-note {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 11px;
+            border-top: 1px solid #2ecc2e;
+            padding-top: 12px;
+            color: #5f9e5f;
+        }
+        input, textarea {
+            background: #000;
+            border: 2px solid #2ecc2e;
+            color: #0f0;
+            padding: 10px;
+            width: 100%;
+            font-family: monospace;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        button#sendMsgBtn {
+            background: #000;
+            border: 2px solid #0f0;
+            color: #0f0;
+            padding: 8px 20px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .retro-container {
+                padding: 10px;
+            }
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            .info-card h3 {
+                font-size: 18px;
+            }
+            .project-item h4 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="retro-container" id="retroRoot">
+    <!-- INTRO SCREEN -->
+    <div id="introScreen" class="intro-screen">
+        <div class="pixel-art">
+            █░█ █▀▀ █░█<br>
+            █▀█ █▀▀ ▄▀▄<br>
+            ▀░▀ ▀▀▀ ▀░▀
+        </div>
+        <h1>⚡ KENJIE_8BIT.EXE ⚡</h1>
+        <div style="color:#2ecc2e; margin: 12px;">// PRESS START //</div>
+        <button id="startBtn">▶ START</button>
+        <div style="margin-top: 20px; font-size:11px; color:#2e6e2e;">portfolio v2.0 - mobile ready</div>
+    </div>
+
+    <!-- MAIN PORTFOLIO (REAL INFO) -->
+    <div id="mainPortfolio" class="main-portfolio">
+        <div class="pixel-header">
+            <h2>┌[ KENJIE • DEVMODE ]┐</h2>
+            <div class="badge">🕹️ 8-BIT / 2026</div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="info">📀 INFO</button>
+            <button class="tab-btn" data-tab="projects">🕹️ PROJECTS</button>
+            <button class="tab-btn" data-tab="experience">💾 LEARNING</button>
+            <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
+        </div>
+
+        <!-- INFO PANEL (kenjie real info) -->
+        <div id="infoPanel" class="panel active-panel">
+            <div class="info-card">
+                <h3>👤 PROFILE</h3>
+                <p><strong>NAME:</strong> Kenjie C. <br>
+                <strong>BIRTH:</strong> October 8, 2010 (Age: 16)<br>
+                <strong>SCHOOL:</strong> Don Pablo Memorial Stand Alone Senior High School<br>
+                <strong>GRADUATING:</strong> 2027<br>
+                <strong>CODING:</strong> Python · HTML/CSS · JavaScript (basics)<br>
+                <strong>INTERESTS:</strong> AI assistants, prank websites, game dev, retro tech.</p>
+            </div>
+            <div class="info-card">
+                <h3>🎯 BIO</h3>
+                <p>Hi! I'm Kenjie — a 16‑year‑old student and self‑taught coder from the Philippines. I love building creative web experiments: from funny prank love sites to small AI prototypes. Currently learning full‑stack development while surviving senior high school. Pixel art and 8‑bit aesthetics fuel my designs.</p>
+            </div>
+            <div class="info-card">
+                <h3>📚 CURRENT STACK</h3>
+                <ul class="pixel-list">
+                    <li>Python (Flask, basic automation)</li>
+                    <li>HTML5 + CSS3 (flex, grid, retro UI)</li>
+                    <li>JavaScript (DOM events, fetch)</li>
+                    <li>VS Code + Git</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PROJECTS PANEL (kenjie projects) -->
+        <div id="projectsPanel" class="panel">
+            <div class="project-grid">
+                <div class="project-item">
+                    <h4>💔 PRANK LOVE SITE</h4>
+                    <p>Interactive fake love letter generator with fake countdown, confetti and unexpected jumpscare (lighthearted). Built with HTML, CSS, vanilla JS.</p>
+                    <span style="color:#5a9e5a;">[ HTML / CSS / JS ]</span>
+                </div>
+                <div class="project-item">
+                    <h4>🤖 F.R.I.D.A.Y. AI</h4>
+                    <p>Voice‑assistant clone (inspired by Iron Man). Web-based speech recognition + custom Python backend for commands: weather, jokes, open apps. Deployed locally.</p>
+                    <span style="color:#5a9e5a;">[ Python (SpeechRecognition) + Flask ]</span>
+                </div>
+                <div class="project-item">
+                    <h4>🏢 ENTERPRISING SITE</h4>
+                    <p>Futuristic dashboard for "startup sim" — interactive company metrics, animated pixel graphs, fake employee generator. Fully responsive.</p>
+                    <span style="color:#5a9e5a;">[ TailwindCSS / Chart.js / Vite ]</span>
+                </div>
+                <div class="project-item">
+                    <h4>🕹️ 8-BIT PORTFOLIO (this)</h4>
+                    <p>Retro‑styled personal portfolio with intro screen, tabs, mobile support. Showcases my journey and projects.</p>
+                    <span style="color:#5a9e5a;">[ HTML/CSS/JS - responsive ]</span>
+                </div>
+            </div>
+            <div class="info-card" style="margin-top:18px;">
+                <h3>⭐ UPCOMING</h3>
+                <p>Building a multiplayer trivia game with Python websockets + deploying F.R.I.D.A.Y. on a Raspberry Pi. Also learning React for better UI components.</p>
+            </div>
+        </div>
+
+        <!-- EXPERIENCE / LEARNING PANEL -->
+        <div id="experiencePanel" class="panel">
+            <div class="info-card">
+                <h3>📖 EDUCATION</h3>
+                <p><strong>Don Pablo Memorial Stand Alone Senior High School</strong><br>
+                Grade 11-12 (STEM strand) — Expected graduation: 2027<br>
+                Relevant subjects: Computer programming, Basic Web Design, Practical Research.</p>
+            </div>
+            <div class="info-card">
+                <h3>🧠 SELF-LEARNING JOURNEY</h3>
+                <ul class="pixel-list">
+                    <li>2022: Started with Python (YouTube & freeCodeCamp)</li>
+                    <li>2023: Built first CLI game and simple HTML site</li>
+                    <li>2024: Created prank love site (went viral among classmates)</li>
+                    <li>2025: Developed F.R.I.D.A.Y. prototype (voice module)</li>
+                    <li>2026: Currently mastering responsive design & JavaScript frameworks</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <h3>🏅 ACHIEVEMENTS</h3>
+                <ul class="pixel-list">
+                    <li>School best in coding contest (2025) - "Innovative Web Tool"</li>
+                    <li>Completed Harvard CS50x Introduction to Computer Science</li>
+                    <li>Active member of Don Pablo Tech Club (leader for web dev)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- CONTACT PANEL -->
+        <div id="contactPanel" class="panel">
+            <div class="info-card">
+                <h3>📡 CONNECT</h3>
+                <div class="contact-row">
+                    <span>📧 EMAIL:</span> <a href="mailto:kenjie.coding@8bit.ph">kenjie.coding@8bit.ph</a>
+                </div>
+                <div class="contact-row">
+                    <span>🐙 GITHUB:</span> <a href="#">github.com/kenjie_8bit</a>
+                </div>
+                <div class="contact-row">
+                    <span>📷 INSTAGRAM:</span> <a href="#">@kenjie.dev</a>
+                </div>
+                <div class="contact-row">
+                    <span>💬 DISCORD:</span> <span style="color:#2ecc2e;">kenjie.py (PixelCoders server)</span>
+                </div>
+                <hr>
+                <h3>⚡ SEND A MESSAGE</h3>
+                <form id="retroForm">
+                    <label>SUBJECT:</label>
+                    <input type="text" id="subj" placeholder="enter subject">
+                    <label style="margin-top:8px;">MESSAGE:</label>
+                    <textarea id="msg" rows="3" placeholder="type your 8-bit note..."></textarea>
+                    <button type="button" id="sendMsgBtn">📨 TRANSMIT</button>
+                </form>
+                <p id="formFeedback" style="margin-top: 12px; color:#9eff9e;"></p>
+            </div>
+        </div>
+        <div class="footer-note">
+            [ 8-bit responsive portfolio ]  // kenjie • 2026 //
+        </div>
+    </div>
+</div>
+
+<script>
+    // INTRO TO PORTFOLIO
+    const introDiv = document.getElementById('introScreen');
+    const mainDiv = document.getElementById('mainPortfolio');
+    const startBtn = document.getElementById('startBtn');
+    startBtn.addEventListener('click', () => {
+        introDiv.style.display = 'none';
+        mainDiv.style.display = 'block';
+    });
+
+    // TAB MANAGEMENT
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = {
+        info: document.getElementById('infoPanel'),
+        projects: document.getElementById('projectsPanel'),
+        experience: document.getElementById('experiencePanel'),
+        contact: document.getElementById('contactPanel')
+    };
+    function activateTab(tabId) {
+        tabs.forEach(btn => btn.classList.remove('active'));
+        Object.values(panels).forEach(panel => {
+            if(panel) panel.classList.remove('active-panel');
+        });
+        if(panels[tabId]) panels[tabId].classList.add('active-panel');
+        const activeButton = Array.from(tabs).find(btn => btn.getAttribute('data-tab') === tabId);
+        if(activeButton) activeButton.classList.add('active');
+    }
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabName = btn.getAttribute('data-tab');
+            if(tabName && panels[tabName]) activateTab(tabName);
+        });
+    });
+
+    // demo contact form
+    const sendBtn = document.getElementById('sendMsgBtn');
+    const feedback = document.getElementById('formFeedback');
+    if(sendBtn) {
+        sendBtn.addEventListener('click', () => {
+            const subject = document.getElementById('subj')?.value.trim();
+            const message = document.getElementById('msg')?.value.trim();
+            if(!subject || !message) {
+                feedback.innerText = '❌ ERROR: subject & message required.';
+                feedback.style.color = '#ff8888';
+                setTimeout(() => feedback.innerText = '', 2200);
+            } else {
+                feedback.innerText = '✓ Message sent (demo) — Kenjie will reply soon!';
+                feedback.style.color = '#aaffaa';
+                document.getElementById('subj').value = '';
+                document.getElementById('msg').value = '';
+                setTimeout(() => feedback.innerText = '', 2800);
+            }
+        });
+    }
+
+    // extra touch optimization: remove hover delays
+    const allBtns = document.querySelectorAll('button, .tab-btn');
+    allBtns.forEach(btn => {
+        btn.addEventListener('touchstart', (e) => {
+            // just for instant feedback
+        });
+    });
+</script>
+</body>
+</html>
