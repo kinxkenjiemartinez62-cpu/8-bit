@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>8-BIT PORTFOLIO // KENJIE</title>
     <style>
         * {
@@ -21,13 +21,33 @@
             justify-content: center;
             align-items: center;
             padding: 12px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* 8-bit container */
+        /* CANVAS PARTICLES BACKGROUND */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        /* make pointer events auto on canvas to detect mouse/finger? but we need to detect movement, we'll set pointer-events: none on canvas and track mouse on body? Actually we need repulsion: canvas must receive mouse coords but also allow interaction with portfolio. We'll set canvas style pointer-events: none and track mouse on window, then repulsion works. */
+        #particleCanvas {
+            pointer-events: none;
+        }
+
+        /* retro container stays above particles */
         .retro-container {
+            position: relative;
+            z-index: 2;
             max-width: 1100px;
             width: 100%;
-            background: #000000;
+            background: #000000cc;
+            backdrop-filter: blur(2px);
             border: 4px solid #2ecc2e;
             box-shadow: 6px 6px 0 #0f3f0f;
             padding: 16px;
@@ -38,21 +58,18 @@
         .intro-screen {
             text-align: center;
             padding: 30px 16px;
-            background: #000;
+            background: #000000aa;
             border: 2px solid #2ecc2e;
         }
         .intro-screen h1 {
             font-size: clamp(28px, 8vw, 48px);
             color: #2ecc2e;
             text-shadow: 3px 3px 0 #0a4f0a;
-            letter-spacing: 2px;
-            word-break: break-word;
         }
         .pixel-art {
             font-size: 32px;
             line-height: 1.2;
             letter-spacing: 4px;
-            margin: 16px 0;
         }
         .intro-screen button {
             background: #000;
@@ -64,11 +81,6 @@
             padding: 10px 28px;
             margin-top: 20px;
             cursor: pointer;
-            width: auto;
-            min-width: 160px;
-        }
-        .intro-screen button:active {
-            transform: scale(0.96);
         }
 
         /* MAIN PORTFOLIO */
@@ -76,7 +88,6 @@
             display: none;
         }
 
-        /* header */
         .pixel-header {
             border-bottom: 3px solid #2ecc2e;
             padding-bottom: 12px;
@@ -90,17 +101,14 @@
         .pixel-header h2 {
             color: #2ecc2e;
             font-size: clamp(20px, 6vw, 28px);
-            letter-spacing: 1px;
         }
         .badge {
             background: #1a2a1a;
             color: #8aff8a;
             padding: 4px 10px;
-            font-size: 12px;
             border: 1px solid #2ecc2e;
         }
 
-        /* navigation tabs: touch friendly */
         .nav-tabs {
             display: flex;
             flex-wrap: wrap;
@@ -119,20 +127,15 @@
             padding: 8px 18px;
             cursor: pointer;
             min-height: 44px;
-            transition: 0.05s linear;
         }
         .tab-btn.active {
             background: #2ecc2e;
             color: #000;
         }
-        .tab-btn:active {
-            transform: translate(2px, 2px);
-        }
 
-        /* panels */
         .panel {
             display: none;
-            background: #0a100a;
+            background: #0a100acc;
             border: 2px solid #2ecc2e;
             padding: 18px;
             margin-top: 8px;
@@ -142,42 +145,50 @@
             display: block;
         }
 
-        /* cards */
         .info-card {
-            background: #000;
+            background: #000000bb;
             border-left: 8px solid #2ecc2e;
             padding: 16px;
             margin-bottom: 20px;
             color: #b3ffb3;
-            word-break: break-word;
         }
         .info-card h3 {
             color: #2ecc2e;
             font-size: 22px;
             margin-bottom: 12px;
         }
-        .info-card p, .info-card li {
-            font-size: 15px;
-            line-height: 1.5;
-        }
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
         }
         .project-item {
-            background: #000;
+            background: #000000cc;
             border: 2px solid #2ecc2e;
             padding: 16px;
-            transition: 0.05s linear;
-        }
-        .project-item:active {
-            transform: translate(2px, 2px);
         }
         .project-item h4 {
             color: #2ecc2e;
             font-size: 20px;
-            margin-bottom: 8px;
+        }
+        .project-img {
+            width: 100%;
+            margin: 12px 0;
+            border: 2px solid #2ecc2e;
+            background: #1a2a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 140px;
+            color: #8aff8a;
+            font-size: 12px;
+            text-align: center;
+        }
+        .project-img img {
+            max-width: 100%;
+            max-height: 140px;
+            object-fit: cover;
+            display: block;
         }
         .contact-row {
             display: flex;
@@ -185,16 +196,13 @@
             flex-wrap: wrap;
             gap: 12px;
             margin: 14px 0;
-        }
-        .contact-row a {
-            color: #2ecc2e;
-            text-decoration: none;
-            border-bottom: 2px dotted #2ecc2e;
             word-break: break-all;
+        }
+        .contact-row a, .contact-row span {
+            color: #2ecc2e;
         }
         hr {
             border-color: #2ecc2e;
-            margin: 16px 0;
         }
         .pixel-list {
             list-style: none;
@@ -204,14 +212,6 @@
             content: "► ";
             color: #2ecc2e;
         }
-        .footer-note {
-            margin-top: 28px;
-            text-align: center;
-            font-size: 11px;
-            border-top: 1px solid #2ecc2e;
-            padding-top: 12px;
-            color: #5f9e5f;
-        }
         input, textarea {
             background: #000;
             border: 2px solid #2ecc2e;
@@ -219,8 +219,6 @@
             padding: 10px;
             width: 100%;
             font-family: monospace;
-            font-size: 14px;
-            margin-top: 5px;
         }
         button#sendMsgBtn {
             background: #000;
@@ -228,185 +226,257 @@
             color: #0f0;
             padding: 8px 20px;
             font-weight: bold;
-            font-size: 16px;
             margin-top: 8px;
             cursor: pointer;
         }
         @media (max-width: 600px) {
-            .retro-container {
-                padding: 10px;
-            }
-            .tab-btn {
-                padding: 6px 12px;
-                font-size: 14px;
-            }
-            .info-card h3 {
-                font-size: 18px;
-            }
-            .project-item h4 {
-                font-size: 18px;
-            }
+            .retro-container { padding: 10px; }
+            .tab-btn { padding: 6px 12px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
+
+<canvas id="particleCanvas"></canvas>
+
 <div class="retro-container" id="retroRoot">
     <!-- INTRO SCREEN -->
     <div id="introScreen" class="intro-screen">
-        <div class="pixel-art">
-            █░█ █▀▀ █░█<br>
-            █▀█ █▀▀ ▄▀▄<br>
-            ▀░▀ ▀▀▀ ▀░▀
-        </div>
+        <div class="pixel-art">█░█ █▀▀ █░█<br>█▀█ █▀▀ ▄▀▄<br>▀░▀ ▀▀▀ ▀░▀</div>
         <h1>⚡ KENJIE_8BIT.EXE ⚡</h1>
-        <div style="color:#2ecc2e; margin: 12px;">// PRESS START //</div>
+        <div style="color:#2ecc2e; margin:12px;">// PRESS START //</div>
         <button id="startBtn">▶ START</button>
-        <div style="margin-top: 20px; font-size:11px; color:#2e6e2e;">portfolio v2.0 - mobile ready</div>
     </div>
 
-    <!-- MAIN PORTFOLIO (REAL INFO) -->
+    <!-- MAIN PORTFOLIO -->
     <div id="mainPortfolio" class="main-portfolio">
         <div class="pixel-header">
             <h2>┌[ KENJIE • DEVMODE ]┐</h2>
-            <div class="badge">🕹️ 8-BIT / 2026</div>
+            <div class="badge">🕹️ 8-BIT / PARTICLES</div>
         </div>
-
         <div class="nav-tabs">
             <button class="tab-btn active" data-tab="info">📀 INFO</button>
             <button class="tab-btn" data-tab="projects">🕹️ PROJECTS</button>
-            <button class="tab-btn" data-tab="experience">💾 LEARNING</button>
+            <button class="tab-btn" data-tab="experience">💾 WORK</button>
             <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
         </div>
 
-        <!-- INFO PANEL (kenjie real info) -->
+        <!-- INFO PANEL -->
         <div id="infoPanel" class="panel active-panel">
             <div class="info-card">
-                <h3>👤 PROFILE</h3>
-                <p><strong>NAME:</strong> Kenjie C. <br>
-                <strong>BIRTH:</strong> October 8, 2010 (Age: 16)<br>
-                <strong>SCHOOL:</strong> Don Pablo Memorial Stand Alone Senior High School<br>
-                <strong>GRADUATING:</strong> 2027<br>
-                <strong>CODING:</strong> Python · HTML/CSS · JavaScript (basics)<br>
-                <strong>INTERESTS:</strong> AI assistants, prank websites, game dev, retro tech.</p>
+                <h3>👤 KENJIE MARTINEZ</h3>
+                <p><strong>BIRTH:</strong> October 8, 2010 (Age 16)<br>
+                <strong>SCHOOL:</strong> Don Pablo Memorial Stand Alone Senior High School (Grad 2027)<br>
+                <strong>CODES:</strong> Python, HTML/CSS, JS, Roblox Lua (game scripting & animating)<br>
+                <strong>PROJECTS:</strong> Prank Love Site, F.R.I.D.A.Y AI, Enterprising Dashboard, Roblox games.</p>
             </div>
             <div class="info-card">
                 <h3>🎯 BIO</h3>
-                <p>Hi! I'm Kenjie — a 16‑year‑old student and self‑taught coder from the Philippines. I love building creative web experiments: from funny prank love sites to small AI prototypes. Currently learning full‑stack development while surviving senior high school. Pixel art and 8‑bit aesthetics fuel my designs.</p>
-            </div>
-            <div class="info-card">
-                <h3>📚 CURRENT STACK</h3>
-                <ul class="pixel-list">
-                    <li>Python (Flask, basic automation)</li>
-                    <li>HTML5 + CSS3 (flex, grid, retro UI)</li>
-                    <li>JavaScript (DOM events, fetch)</li>
-                    <li>VS Code + Git</li>
-                </ul>
+                <p>16yo self-taught dev from PH. I craft web experiments, Roblox animations/game mechanics, and retro-styled UIs. Obsessed with particles, pixel art, and making people smile (or prank them lightly).</p>
             </div>
         </div>
 
-        <!-- PROJECTS PANEL (kenjie projects) -->
+        <!-- PROJECTS PANEL WITH IMAGES (placeholder images - replace with your own) -->
         <div id="projectsPanel" class="panel">
             <div class="project-grid">
                 <div class="project-item">
                     <h4>💔 PRANK LOVE SITE</h4>
-                    <p>Interactive fake love letter generator with fake countdown, confetti and unexpected jumpscare (lighthearted). Built with HTML, CSS, vanilla JS.</p>
-                    <span style="color:#5a9e5a;">[ HTML / CSS / JS ]</span>
+                    <div class="project-img" id="imgPrank">
+                        <!-- replace src with your image -->
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%232ecc2e'/%3E%3Ctext x='10' y='70' fill='black' font-size='14'%3Eprank demo%3C/text%3E%3C/svg%3E" alt="prank love site preview" style="max-width:100%">
+                    </div>
+                    <p>Fake love letter + jumpscare, confetti. Pure HTML/CSS/JS.</p>
+                    <span style="color:#5a9e5a;">[ JS / CSS ]</span>
                 </div>
                 <div class="project-item">
-                    <h4>🤖 F.R.I.D.A.Y. AI</h4>
-                    <p>Voice‑assistant clone (inspired by Iron Man). Web-based speech recognition + custom Python backend for commands: weather, jokes, open apps. Deployed locally.</p>
-                    <span style="color:#5a9e5a;">[ Python (SpeechRecognition) + Flask ]</span>
+                    <h4>🤖 F.R.I.D.A.Y AI</h4>
+                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%233366cc'/%3E%3Ctext x='10' y='70' fill='white' font-size='14'%3EF.R.I.D.A.Y UI%3C/text%3E%3C/svg%3E" alt="friday ai"></div>
+                    <p>Voice assistant + Python backend, speech recognition, web dashboard.</p>
                 </div>
                 <div class="project-item">
                     <h4>🏢 ENTERPRISING SITE</h4>
-                    <p>Futuristic dashboard for "startup sim" — interactive company metrics, animated pixel graphs, fake employee generator. Fully responsive.</p>
-                    <span style="color:#5a9e5a;">[ TailwindCSS / Chart.js / Vite ]</span>
+                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23aa44aa'/%3E%3Ctext x='10' y='70' fill='white'%3Estartup sim%3C/text%3E%3C/svg%3E" alt="enterprise"></div>
+                    <p>Futuristic business simulator, pixel graphs, responsive.</p>
                 </div>
                 <div class="project-item">
-                    <h4>🕹️ 8-BIT PORTFOLIO (this)</h4>
-                    <p>Retro‑styled personal portfolio with intro screen, tabs, mobile support. Showcases my journey and projects.</p>
-                    <span style="color:#5a9e5a;">[ HTML/CSS/JS - responsive ]</span>
+                    <h4>🎮 ROBLOX GAME DEV</h4>
+                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23ff8800'/%3E%3Ctext x='10' y='70' fill='black'%3ERoblox scripting%3C/text%3E%3C/svg%3E" alt="roblox"></div>
+                    <p>Lua scripting, animations, game mechanics (obby, simulator). 5k+ visits.</p>
                 </div>
             </div>
-            <div class="info-card" style="margin-top:18px;">
-                <h3>⭐ UPCOMING</h3>
-                <p>Building a multiplayer trivia game with Python websockets + deploying F.R.I.D.A.Y. on a Raspberry Pi. Also learning React for better UI components.</p>
+            <div class="info-card">
+                <h3>📸 HOW TO ADD YOUR OWN IMAGES</h3>
+                <p>Inside each .project-img div, replace the &lt;img src="..."&gt; with your own image file. Upload images to same folder (e.g., "assets/prank.png") and set src="assets/yourimage.png". Or use online image URLs.</p>
             </div>
         </div>
 
-        <!-- EXPERIENCE / LEARNING PANEL -->
+        <!-- EXPERIENCE / ROBLOX + WORK -->
         <div id="experiencePanel" class="panel">
             <div class="info-card">
-                <h3>📖 EDUCATION</h3>
-                <p><strong>Don Pablo Memorial Stand Alone Senior High School</strong><br>
-                Grade 11-12 (STEM strand) — Expected graduation: 2027<br>
-                Relevant subjects: Computer programming, Basic Web Design, Practical Research.</p>
-            </div>
-            <div class="info-card">
-                <h3>🧠 SELF-LEARNING JOURNEY</h3>
+                <h3>🎮 ROBLOX: CODING + ANIMATING</h3>
                 <ul class="pixel-list">
-                    <li>2022: Started with Python (YouTube & freeCodeCamp)</li>
-                    <li>2023: Built first CLI game and simple HTML site</li>
-                    <li>2024: Created prank love site (went viral among classmates)</li>
-                    <li>2025: Developed F.R.I.D.A.Y. prototype (voice module)</li>
-                    <li>2026: Currently mastering responsive design & JavaScript frameworks</li>
+                    <li>Game scripting: custom tools, leaderstats, game loops</li>
+                    <li>Animation: Moon Animator, keyframe sequences for characters</li>
+                    <li>Published 3 games: "Pixel Obby", "Frost Fight", "Simulator X Lite"</li>
                 </ul>
             </div>
             <div class="info-card">
-                <h3>🏅 ACHIEVEMENTS</h3>
-                <ul class="pixel-list">
-                    <li>School best in coding contest (2025) - "Innovative Web Tool"</li>
-                    <li>Completed Harvard CS50x Introduction to Computer Science</li>
-                    <li>Active member of Don Pablo Tech Club (leader for web dev)</li>
-                </ul>
+                <h3>📖 SCHOOL & LEARNING</h3>
+                <p>Don Pablo Memorial SHS (STEM) • expected 2027. Self-taught coding since 2022. Python, Web dev, Lua.</p>
+            </div>
+            <div class="info-card">
+                <h3>🏅 HIGHLIGHTS</h3>
+                <ul class="pixel-list"><li>School coding contest winner 2025</li><li>Built functional AI assistant (F.R.I.D.A.Y)</li><li>Roblox developer forum contributor</li></ul>
             </div>
         </div>
 
-        <!-- CONTACT PANEL -->
+        <!-- CONTACT PANEL (updated contacts) -->
         <div id="contactPanel" class="panel">
             <div class="info-card">
-                <h3>📡 CONNECT</h3>
-                <div class="contact-row">
-                    <span>📧 EMAIL:</span> <a href="mailto:kenjie.coding@8bit.ph">kenjie.coding@8bit.ph</a>
-                </div>
-                <div class="contact-row">
-                    <span>🐙 GITHUB:</span> <a href="#">github.com/kenjie_8bit</a>
-                </div>
-                <div class="contact-row">
-                    <span>📷 INSTAGRAM:</span> <a href="#">@kenjie.dev</a>
-                </div>
-                <div class="contact-row">
-                    <span>💬 DISCORD:</span> <span style="color:#2ecc2e;">kenjie.py (PixelCoders server)</span>
-                </div>
+                <h3>📡 REACH KENJIE</h3>
+                <div class="contact-row">📧 EMAIL: <a href="mailto:kinxkenjiemartinez62@gmail.com">kinxkenjiemartinez62@gmail.com</a></div>
+                <div class="contact-row">📞 PHONE: 09947098814</div>
+                <div class="contact-row">🐙 GITHUB: <a href="#">@kenjie2cool4school</a></div>
+                <div class="contact-row">💬 DISCORD: @VcTomato</div>
+                <div class="contact-row">📘 FACEBOOK: Kinx Kenjie Alt</div>
                 <hr>
-                <h3>⚡ SEND A MESSAGE</h3>
-                <form id="retroForm">
-                    <label>SUBJECT:</label>
-                    <input type="text" id="subj" placeholder="enter subject">
-                    <label style="margin-top:8px;">MESSAGE:</label>
-                    <textarea id="msg" rows="3" placeholder="type your 8-bit note..."></textarea>
-                    <button type="button" id="sendMsgBtn">📨 TRANSMIT</button>
-                </form>
-                <p id="formFeedback" style="margin-top: 12px; color:#9eff9e;"></p>
+                <h3>⚡ SEND MESSAGE</h3>
+                <input type="text" id="subj" placeholder="Subject">
+                <textarea id="msg" rows="3" placeholder="Your 8-bit note..."></textarea>
+                <button id="sendMsgBtn">📨 TRANSMIT</button>
+                <p id="formFeedback" style="margin-top:12px;"></p>
             </div>
         </div>
-        <div class="footer-note">
-            [ 8-bit responsive portfolio ]  // kenjie • 2026 //
-        </div>
+        <div class="footer-note">[ particles repel from mouse/finger | 8-bit responsive ]</div>
     </div>
 </div>
 
 <script>
-    // INTRO TO PORTFOLIO
+    // ---------- PARTICLES (repel from mouse/touch) ----------
+    const canvas = document.getElementById('particleCanvas');
+    let ctx = canvas.getContext('2d');
+    let particles = [];
+    const PARTICLE_COUNT = 100;
+    let mouseX = -1000, mouseY = -1000;
+    let repelRadius = 90;
+    let returnSpeed = 0.03;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.origX = this.x;
+            this.origY = this.y;
+            this.vx = 0;
+            this.vy = 0;
+            this.size = 2 + Math.random() * 3;
+            this.color = `hsl(${90 + Math.random() * 40}, 70%, 55%)`;
+        }
+        update() {
+            let dx = this.x - mouseX;
+            let dy = this.y - mouseY;
+            let dist = Math.hypot(dx, dy);
+            if (dist < repelRadius) {
+                let angle = Math.atan2(dy, dx);
+                let force = (repelRadius - dist) / repelRadius * 1.8;
+                this.vx += Math.cos(angle) * force;
+                this.vy += Math.sin(angle) * force;
+            }
+            // damping & return to original
+            this.vx *= 0.92;
+            this.vy *= 0.92;
+            this.x += this.vx;
+            this.y += this.vy;
+            // gentle spring to original
+            this.x += (this.origX - this.x) * returnSpeed;
+            this.y += (this.origY - this.y) * returnSpeed;
+            // boundaries (optional)
+            this.x = Math.min(Math.max(this.x, 2), canvas.width-2);
+            this.y = Math.min(Math.max(this.y, 2), canvas.height-2);
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.fillRect(this.x, this.y, this.size, this.size);
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animateParticles() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let p of particles) {
+            p.update();
+            p.draw();
+        }
+        requestAnimationFrame(animateParticles);
+    }
+
+    function handleMouseMove(e) {
+        let rect = canvas.getBoundingClientRect();
+        let scaleX = canvas.width / rect.width;
+        let scaleY = canvas.height / rect.height;
+        let clientX = e.clientX;
+        let clientY = e.clientY;
+        if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+            mouseX = (clientX - rect.left) * scaleX;
+            mouseY = (clientY - rect.top) * scaleY;
+        } else {
+            mouseX = -1000;
+            mouseY = -1000;
+        }
+    }
+    function handleTouchMove(e) {
+        e.preventDefault();
+        let touch = e.touches[0];
+        let rect = canvas.getBoundingClientRect();
+        let scaleX = canvas.width / rect.width;
+        let scaleY = canvas.height / rect.height;
+        let clientX = touch.clientX;
+        let clientY = touch.clientY;
+        if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+            mouseX = (clientX - rect.left) * scaleX;
+            mouseY = (clientY - rect.top) * scaleY;
+        } else {
+            mouseX = -1000;
+            mouseY = -1000;
+        }
+    }
+    function resetMouse() { mouseX = -1000; mouseY = -1000; }
+
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        initParticles();
+    });
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', resetMouse);
+    window.addEventListener('mouseleave', resetMouse);
+
+    resizeCanvas();
+    initParticles();
+    animateParticles();
+
+    // ----- PORTFOLIO SCRIPT -----
     const introDiv = document.getElementById('introScreen');
     const mainDiv = document.getElementById('mainPortfolio');
-    const startBtn = document.getElementById('startBtn');
-    startBtn.addEventListener('click', () => {
+    const startButton = document.getElementById('startBtn');
+    startButton.addEventListener('click', () => {
         introDiv.style.display = 'none';
         mainDiv.style.display = 'block';
     });
 
-    // TAB MANAGEMENT
+    // Tabs
     const tabs = document.querySelectorAll('.tab-btn');
     const panels = {
         info: document.getElementById('infoPanel'),
@@ -416,48 +486,38 @@
     };
     function activateTab(tabId) {
         tabs.forEach(btn => btn.classList.remove('active'));
-        Object.values(panels).forEach(panel => {
-            if(panel) panel.classList.remove('active-panel');
-        });
+        Object.values(panels).forEach(p => { if(p) p.classList.remove('active-panel'); });
         if(panels[tabId]) panels[tabId].classList.add('active-panel');
-        const activeButton = Array.from(tabs).find(btn => btn.getAttribute('data-tab') === tabId);
-        if(activeButton) activeButton.classList.add('active');
+        let activeBtn = Array.from(tabs).find(btn => btn.getAttribute('data-tab') === tabId);
+        if(activeBtn) activeBtn.classList.add('active');
     }
     tabs.forEach(btn => {
         btn.addEventListener('click', () => {
-            const tabName = btn.getAttribute('data-tab');
-            if(tabName && panels[tabName]) activateTab(tabName);
+            let tab = btn.getAttribute('data-tab');
+            if(tab && panels[tab]) activateTab(tab);
         });
     });
 
-    // demo contact form
-    const sendBtn = document.getElementById('sendMsgBtn');
-    const feedback = document.getElementById('formFeedback');
-    if(sendBtn) {
-        sendBtn.addEventListener('click', () => {
-            const subject = document.getElementById('subj')?.value.trim();
-            const message = document.getElementById('msg')?.value.trim();
-            if(!subject || !message) {
-                feedback.innerText = '❌ ERROR: subject & message required.';
-                feedback.style.color = '#ff8888';
-                setTimeout(() => feedback.innerText = '', 2200);
+    // Contact form demo
+    const sendMsg = document.getElementById('sendMsgBtn');
+    const feedbackSpan = document.getElementById('formFeedback');
+    if(sendMsg) {
+        sendMsg.addEventListener('click', () => {
+            let subj = document.getElementById('subj')?.value.trim();
+            let msg = document.getElementById('msg')?.value.trim();
+            if(!subj || !msg) {
+                feedbackSpan.innerText = '❌ ERROR: subject & message required.';
+                feedbackSpan.style.color = '#ff8888';
+                setTimeout(() => feedbackSpan.innerText = '', 2000);
             } else {
-                feedback.innerText = '✓ Message sent (demo) — Kenjie will reply soon!';
-                feedback.style.color = '#aaffaa';
+                feedbackSpan.innerText = '✓ Message sent (demo) — Kenjie will reply soon!';
+                feedbackSpan.style.color = '#aaffaa';
                 document.getElementById('subj').value = '';
                 document.getElementById('msg').value = '';
-                setTimeout(() => feedback.innerText = '', 2800);
+                setTimeout(() => feedbackSpan.innerText = '', 2500);
             }
         });
     }
-
-    // extra touch optimization: remove hover delays
-    const allBtns = document.querySelectorAll('button, .tab-btn');
-    allBtns.forEach(btn => {
-        btn.addEventListener('touchstart', (e) => {
-            // just for instant feedback
-        });
-    });
 </script>
 </body>
 </html>
