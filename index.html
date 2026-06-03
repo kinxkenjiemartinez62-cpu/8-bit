@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>KENJIE'S PORTFOLIO // ATOM DRIFT</title>
+    <title>KENJIE PORTFOLIO</title>
     <style>
         * {
             margin: 0;
@@ -107,7 +107,7 @@
             background: rgba(30,60,30,0.6);
             padding: 5px 14px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             border: 1px solid #2ecc2e;
         }
 
@@ -207,7 +207,7 @@
         }
         hr { border-color: #2ecc2e; margin: 18px 0; }
         .pixel-list { list-style: none; padding-left: 0; }
-        .pixel-list li::before { content: "⚛️ "; color: #2ecc2e; }
+        .pixel-list li::before { content: "► "; color: #2ecc2e; }
         input, textarea {
             background: rgba(0,0,0,0.7);
             border: 1px solid #2ecc2e;
@@ -248,16 +248,16 @@
 
 <div class="retro-container" id="retroRoot">
     <div id="introScreen" class="intro-screen">
-        <div class="pixel-art">⚛️ █░█ █▀▀ █░█ ⚛️<br>█▀█ █▀▀ ▄▀▄<br>▀░▀ ▀▀▀ ▀░▀</div>
-        <h1>⚛️ KENJIE'S PORTFOLIO ⚛️</h1>
-        <div style="color:#caffca; margin:10px;">// ATOMS IN MOTION //</div>
+        <div class="pixel-art">█░█ █▀▀ █░█<br>█▀█ █▀▀ ▄▀▄<br>▀░▀ ▀▀▀ ▀░▀</div>
+        <h1>⚛️ KENJIE PORTFOLIO ⚛️</h1>
+        <div style="color:#caffca; margin:10px;">// ICT STUDENT //</div>
         <button id="startBtn">▶ START</button>
     </div>
 
     <div id="mainPortfolio" class="main-portfolio">
         <div class="pixel-header">
-            <h2>┌[ KENJIE • ATOM_DRIFT ]┐</h2>
-            <div class="badge">⚛️ perpetual motion / glass UI</div>
+            <h2>┌[ KENJIE PORTFOLIO ]┐</h2>
+            <div class="badge">8-bit / glass UI</div>
         </div>
         <div class="nav-tabs">
             <button class="tab-btn active" data-tab="info">📀 INFO</button>
@@ -266,23 +266,19 @@
             <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
         </div>
 
-        <!-- INFO PANEL -->
+        <!-- INFO PANEL (ICT, no published games) -->
         <div id="infoPanel" class="panel active-panel">
             <div class="info-card">
                 <h3>👤 KENJIE MARTINEZ</h3>
                 <p><strong>BIRTH:</strong> Oct 8, 2010 (Age 16)<br>
-                <strong>SCHOOL:</strong> Don Pablo Memorial SHS (Grad 2027)<br>
+                <strong>SCHOOL:</strong> Don Pablo Memorial SHS (ICT strand, Grad 2027)<br>
                 <strong>CODES:</strong> Python, HTML/CSS/JS, Roblox Lua, animating<br>
                 <strong>GITHUB:</strong> <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank" style="color:#aaffaa;">@kinxkenjiemartinez62-cpu</a> / <strong>@kenjie2cool4school</strong><br>
-                <strong>PROJECTS:</strong> F.R.I.D.A.Y AI, Enterprising Site</p>
-            </div>
-            <div class="info-card">
-                <h3>⚛️ DRIFTING ATOMS</h3>
-                <p>Atoms drift endlessly, react to your finger/mouse, but do NOT block scrolling. Pure liquid glass experience.</p>
+                <strong>PROJECTS:</strong> F.R.I.D.A.Y AI, Enterprising Site, Hypershot (co-dev)</p>
             </div>
         </div>
 
-        <!-- PROJECTS PANEL (only F.R.I.D.A.Y and Enterprise) -->
+        <!-- PROJECTS PANEL (with Hypershot added) -->
         <div id="projectsPanel" class="panel">
             <div class="project-grid">
                 <div class="project-item">
@@ -299,18 +295,25 @@
                     </div>
                     <p>Business dashboard, e-commerce interface, pixel graphs, fully responsive.</p>
                 </div>
+                <div class="project-item">
+                    <h4>🎮 HYPER SHOT</h4>
+                    <div class="project-img">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23ff6600'/%3E%3Ctext x='20' y='70' fill='white' font-size='16'%3EHYPER SHOT%3C/text%3E%3C/svg%3E" alt="Hypershot preview">
+                    </div>
+                    <p>Co-developed game on Roblox – coding mechanics, UI, animations. Contributed to Hypershot project.</p>
+                </div>
             </div>
         </div>
 
-        <!-- OCCUPATION PANEL -->
+        <!-- OCCUPATION PANEL (no false claims, only helping code hypershot) -->
         <div id="occupationPanel" class="panel">
             <div class="info-card">
-                <h3>⚛️ OCCUPATION: ROBLOX CREATOR + STUDENT</h3>
+                <h3>⚛️ OCCUPATION: ICT STUDENT + HELPER CODER</h3>
                 <ul class="pixel-list">
-                    <li>Roblox Game Coding & Animating (Lua, Moon Animator)</li>
-                    <li>3 published games: "Pixel Obby", "Frost Fight", "Simulator X Lite"</li>
-                    <li>Student at Don Pablo Memorial SHS (STEM) graduating 2027</li>
+                    <li>Student at Don Pablo Memorial SHS – ICT strand (graduating 2027)</li>
+                    <li>Roblox scripting & animating (assisted in Hypershot project)</li>
                     <li>Freelance web dev & AI prototyping</li>
+                    <li>Learning full-stack development</li>
                 </ul>
             </div>
         </div>
@@ -325,13 +328,13 @@
                 <div class="contact-row">💬 DISCORD: @VcTomato</div>
                 <div class="contact-row">📘 FACEBOOK: Kinx Kenjie Alt</div>
                 <hr>
-                <input type="text" id="subj" placeholder="⚛️ Subject">
-                <textarea id="msg" rows="3" placeholder="Send an atomic message..."></textarea>
-                <button id="sendMsgBtn">⚛️ TRANSMIT</button>
+                <input type="text" id="subj" placeholder="Subject">
+                <textarea id="msg" rows="3" placeholder="Send a message..."></textarea>
+                <button id="sendMsgBtn">📨 TRANSMIT</button>
                 <p id="formFeedback" style="margin-top:12px;"></p>
             </div>
         </div>
-        <div class="footer-note">[ atoms drift & repel | scroll fully enabled | liquid glass ]</div>
+        <div class="footer-note">[ liquid glass | scroll enabled | atoms repel from cursor ]</div>
     </div>
 </div>
 
