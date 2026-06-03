@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>8-BIT ATOM PORTFOLIO // KENJIE</title>
+    <title>ATOM DRIFT // KENJIE 8-BIT</title>
     <style>
         * {
             margin: 0;
@@ -11,25 +11,25 @@
             box-sizing: border-box;
         }
 
-        /* scrolling allowed on mobile */
+        /* FULL SCROLLABLE PAGE — mobile fix */
         html, body {
             width: 100%;
             min-height: 100vh;
             overflow-x: hidden;
-            overflow-y: auto;
+            overflow-y: auto !important;
             background: #050805;
+            position: relative;
         }
 
         body {
             font-family: 'Courier New', 'VT323', 'Fira Code', monospace;
-            position: relative;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 16px;
+            align-items: flex-start;
+            padding: 20px 16px;
         }
 
-        /* particle canvas fixed background */
+        /* FIXED PARTICLE CANVAS (background) */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -41,7 +41,7 @@
             display: block;
         }
 
-        /* LIQUID GLASS container */
+        /* LIQUID GLASS CONTAINER — scrolls naturally */
         .retro-container {
             position: relative;
             z-index: 2;
@@ -50,43 +50,44 @@
             background: rgba(0, 0, 0, 0.55);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(46, 204, 46, 0.7);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            padding: 18px;
-            transition: all 0.2s ease;
-            border-radius: 12px;
+            border-radius: 24px;
+            padding: 20px;
+            margin: 20px 0;
+            transition: all 0.2s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
-        /* INTRO SCREEN glass */
+        /* INTRO GLASS */
         .intro-screen {
             text-align: center;
             padding: 40px 20px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(6px);
+            border-radius: 20px;
             border: 1px solid #2ecc2e;
-            border-radius: 12px;
         }
         .intro-screen h1 {
-            font-size: clamp(28px, 8vw, 48px);
-            color: #9eff9e;
-            text-shadow: 0 0 5px #0f0;
+            font-size: clamp(28px, 8vw, 52px);
+            color: #aaffaa;
+            text-shadow: 0 0 6px #0f0;
         }
         .pixel-art {
-            font-size: 32px;
+            font-size: 30px;
             line-height: 1.3;
             letter-spacing: 2px;
-            color: #6eff6e;
+            color: #8eff8e;
         }
         .intro-screen button {
             background: rgba(0,0,0,0.7);
             border: 2px solid #2ecc2e;
             color: #2ecc2e;
-            font-size: 24px;
+            font-size: 26px;
             font-family: monospace;
             font-weight: bold;
-            padding: 10px 28px;
-            margin-top: 20px;
+            padding: 12px 32px;
+            margin-top: 30px;
+            border-radius: 60px;
             cursor: pointer;
-            border-radius: 8px;
             backdrop-filter: blur(4px);
         }
 
@@ -98,151 +99,153 @@
         .pixel-header {
             border-bottom: 2px solid rgba(46,204,46,0.8);
             padding-bottom: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            align-items: baseline;
-            gap: 10px;
+            gap: 12px;
         }
         .pixel-header h2 {
-            color: #c0ffc0;
+            color: #c6ffc6;
             font-size: clamp(20px, 6vw, 28px);
-            text-shadow: 0 0 3px #0f0;
         }
         .badge {
-            background: rgba(30,50,30,0.7);
-            color: #9eff9e;
-            padding: 4px 12px;
+            background: rgba(30,60,30,0.7);
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 13px;
             border: 1px solid #2ecc2e;
-            border-radius: 20px;
-            font-size: 12px;
         }
 
+        /* TABS */
         .nav-tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 24px;
-            border-bottom: 1px solid rgba(46,204,46,0.5);
-            padding-bottom: 10px;
+            border-bottom: 1px solid #2ecc2e80;
+            padding-bottom: 12px;
         }
         .tab-btn {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.55);
             border: 1px solid #2ecc2e;
-            color: #2ecc2e;
+            color: #b3ffb3;
             font-family: monospace;
             font-size: 16px;
             font-weight: bold;
-            padding: 8px 18px;
-            cursor: pointer;
-            border-radius: 30px;
+            padding: 8px 20px;
+            border-radius: 40px;
             backdrop-filter: blur(4px);
+            cursor: pointer;
             transition: 0.05s linear;
         }
         .tab-btn.active {
             background: #2ecc2e;
             color: #000;
-            box-shadow: 0 0 8px #0f0;
+            box-shadow: 0 0 10px #0f0;
         }
-        .tab-btn:active { transform: scale(0.96); }
 
+        /* PANELS */
         .panel {
             display: none;
-            background: rgba(10, 16, 10, 0.65);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(46,204,46,0.6);
-            padding: 20px;
-            margin-top: 8px;
-            border-radius: 16px;
-            min-height: 380px;
+            background: rgba(8, 12, 8, 0.7);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(46,204,46,0.5);
+            border-radius: 20px;
+            padding: 22px;
+            margin-top: 6px;
         }
-        .panel.active-panel { display: block; }
+        .panel.active-panel {
+            display: block;
+        }
 
+        /* CARDS */
         .info-card {
-            background: rgba(0, 0, 0, 0.5);
-            border-left: 6px solid #2ecc2e;
-            padding: 16px;
-            margin-bottom: 20px;
-            color: #d0ffd0;
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.55);
+            border-left: 5px solid #2ecc2e;
+            padding: 18px;
+            margin-bottom: 24px;
+            border-radius: 18px;
             backdrop-filter: blur(2px);
+            color: #e0ffe0;
         }
         .info-card h3 {
-            color: #8eff8e;
+            color: #b4ffb4;
             font-size: 22px;
             margin-bottom: 12px;
         }
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 22px;
         }
         .project-item {
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.65);
             border: 1px solid #2ecc2e;
+            border-radius: 18px;
             padding: 16px;
-            border-radius: 12px;
         }
-        .project-item h4 { color: #9eff9e; font-size: 20px; margin-bottom: 6px; }
+        .project-item h4 {
+            color: #b2ffb2;
+            font-size: 20px;
+        }
         .project-img {
-            width: 100%;
             margin: 12px 0;
-            background: #1a2a1aaa;
-            border-radius: 8px;
             text-align: center;
+            background: #1e2a1eaa;
+            border-radius: 14px;
             min-height: 120px;
         }
         .project-img img {
             max-width: 100%;
             max-height: 130px;
-            border-radius: 8px;
+            border-radius: 12px;
             object-fit: cover;
         }
         .contact-row {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
-            margin: 14px 0;
+            gap: 14px;
+            margin: 16px 0;
             word-break: break-word;
         }
-        .contact-row a, .contact-row span { color: #8eff8e; }
-        hr { border-color: #2ecc2e; margin: 16px 0; }
+        .contact-row a, .contact-row span {
+            color: #b0ffb0;
+        }
+        hr { border-color: #2ecc2e; margin: 18px 0; }
         .pixel-list { list-style: none; padding-left: 0; }
         .pixel-list li::before { content: "⚛️ "; color: #2ecc2e; }
         input, textarea {
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
             border: 1px solid #2ecc2e;
-            color: #0f0;
-            padding: 10px;
+            color: #cfffcf;
+            padding: 12px;
             width: 100%;
             font-family: monospace;
-            border-radius: 8px;
-            margin-top: 6px;
+            border-radius: 16px;
+            margin-top: 8px;
         }
         button#sendMsgBtn {
             background: rgba(0,0,0,0.7);
             border: 1px solid #0f0;
             color: #0f0;
-            padding: 8px 20px;
-            border-radius: 30px;
+            padding: 10px 24px;
+            border-radius: 40px;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 14px;
             cursor: pointer;
         }
         .footer-note {
-            margin-top: 24px;
+            margin-top: 28px;
             text-align: center;
             font-size: 11px;
-            border-top: 1px solid #2ecc2e80;
-            padding-top: 12px;
-            color: #7fbf7f;
+            border-top: 1px solid #2ecc2e70;
+            padding-top: 14px;
+            color: #90c090;
         }
-        @media (max-width: 600px) {
-            .retro-container { padding: 12px; margin: 8px; }
-            .tab-btn { padding: 6px 12px; font-size: 14px; }
-            .info-card h3 { font-size: 18px; }
+        @media (max-width: 640px) {
+            .retro-container { padding: 14px; margin: 10px 0; }
+            .tab-btn { font-size: 14px; padding: 6px 14px; }
         }
     </style>
 </head>
@@ -253,15 +256,15 @@
 <div class="retro-container" id="retroRoot">
     <div id="introScreen" class="intro-screen">
         <div class="pixel-art">⚛️ █░█ █▀▀ █░█ ⚛️<br>█▀█ █▀▀ ▄▀▄<br>▀░▀ ▀▀▀ ▀░▀</div>
-        <h1>⚛️ KENJIE_ATOM ⚛️</h1>
-        <div style="color:#9eff9e; margin:12px;">// LIQUID GLASS //</div>
+        <h1>⚛️ KENJIE DRIFT ⚛️</h1>
+        <div style="color:#aaffaa; margin:10px;">// ATOMS IN MOTION //</div>
         <button id="startBtn">▶ START</button>
     </div>
 
     <div id="mainPortfolio" class="main-portfolio">
         <div class="pixel-header">
-            <h2>┌[ KENJIE • ATOM DEVMODE ]┐</h2>
-            <div class="badge">⚛️ GLASS / PARTICLES</div>
+            <h2>┌[ KENJIE • ATOM_DRIFT ]┐</h2>
+            <div class="badge">⚛️ perpetual motion / glass UI</div>
         </div>
         <div class="nav-tabs">
             <button class="tab-btn active" data-tab="info">📀 INFO</button>
@@ -270,32 +273,33 @@
             <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
         </div>
 
-        <!-- INFO PANEL -->
+        <!-- INFO PANEL (GITHUB ADDED) -->
         <div id="infoPanel" class="panel active-panel">
             <div class="info-card">
                 <h3>👤 KENJIE MARTINEZ</h3>
                 <p><strong>BIRTH:</strong> Oct 8, 2010 (Age 16)<br>
                 <strong>SCHOOL:</strong> Don Pablo Memorial SHS (Grad 2027)<br>
                 <strong>CODES:</strong> Python, HTML/CSS/JS, Roblox Lua, animating<br>
-                <strong>BUILT:</strong> Prank Love Site, F.R.I.D.A.Y AI, Enterprising Site, Roblox games</p>
+                <strong>GITHUB:</strong> <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank" style="color:#8eff8e;">@kinxkenjiemartinez62-cpu</a> / <strong>@kenjie2cool4school</strong><br>
+                <strong>PROJECTS:</strong> Prank Love Site, F.R.I.D.A.Y AI, Enterprising Site, Roblox games</p>
             </div>
             <div class="info-card">
-                <h3>⚛️ ATOM THEME</h3>
-                <p>Floating atomic particles react to mouse/finger — repel like magnetic fields. UI uses liquid glass blur so you see the electrons dancing behind.</p>
+                <h3>⚛️ DRIFTING ATOMS</h3>
+                <p>Atoms never stay in place — they drift, bounce, and react to your mouse/finger like magnetic fields. No fixed return, continuous Brownian motion.</p>
             </div>
         </div>
 
-        <!-- PROJECTS (image placeholders) -->
+        <!-- PROJECTS (with image placeholders) -->
         <div id="projectsPanel" class="panel">
             <div class="project-grid">
                 <div class="project-item">
                     <h4>💔 PRANK LOVE SITE</h4>
-                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%232ecc2e'/%3E%3Ctext x='15' y='70' fill='black' font-size='14'%3E💔 prank demo%3C/text%3E%3C/svg%3E" alt="prank love"></div>
-                    <p>Fake love letter, confetti, jumpscare. HTML/CSS/JS.</p>
+                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%232ecc2e'/%3E%3Ctext x='20' y='70' fill='black' font-size='14'%3E💔 prank demo%3C/text%3E%3C/svg%3E" alt="prank"></div>
+                    <p>Fake love generator + jumpscare. HTML/CSS/JS.</p>
                 </div>
                 <div class="project-item">
                     <h4>🤖 F.R.I.D.A.Y AI</h4>
-                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%233366cc'/%3E%3Ctext x='10' y='70' fill='white'%3EF.R.I.D.A.Y%3C/text%3E%3C/svg%3E" alt="friday"></div>
+                    <div class="project-img"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%233366cc'/%3E%3Ctext x='15' y='70' fill='white'%3EF.R.I.D.A.Y%3C/text%3E%3C/svg%3E" alt="friday"></div>
                     <p>Voice assistant + Python backend, speech recog.</p>
                 </div>
                 <div class="project-item">
@@ -309,122 +313,120 @@
                     <p>Lua scripting, custom animations, obbies.</p>
                 </div>
             </div>
-            <div class="info-card"><h3>🖼️ ADD YOUR IMAGES</h3><p>Replace src in .project-img img with your own image URLs or local paths.</p></div>
+            <div class="info-card"><h3>🖼️ ADD REAL IMAGES</h3><p>Replace src in .project-img img with your own local/online images.</p></div>
         </div>
 
-        <!-- OCCUPATION (replaces work) -->
+        <!-- OCCUPATION (Roblox + student) -->
         <div id="occupationPanel" class="panel">
             <div class="info-card">
-                <h3>⚛️ OCCUPATION: ROBLOX DEV + STUDENT</h3>
+                <h3>⚛️ OCCUPATION: ROBLOX CREATOR + STUDENT</h3>
                 <ul class="pixel-list">
                     <li>Roblox Game Coding & Animating (Lua, Moon Animator)</li>
-                    <li>Building interactive game systems, tools, custom animations</li>
+                    <li>3 published games: "Pixel Obby", "Frost Fight", "Simulator X Lite"</li>
                     <li>Student at Don Pablo Memorial SHS (STEM) graduating 2027</li>
-                    <li>Freelance web projects (HTML/CSS/JS, Python automation)</li>
+                    <li>Freelance web dev & AI prototyping</li>
                 </ul>
-            </div>
-            <div class="info-card">
-                <h3>🎮 ROBLOX ACHIEVEMENTS</h3>
-                <ul class="pixel-list"><li>Published 3 games: "Pixel Obby", "Frost Fight", "Simulator X Lite"</li><li>5k+ visits, active community</li><li>Skilled in tweening, remote events, character rig animations</li></ul>
             </div>
         </div>
 
-        <!-- CONTACT PANEL full details -->
+        <!-- CONTACT PANEL (updated with GitHub) -->
         <div id="contactPanel" class="panel">
             <div class="info-card">
-                <h3>📡 CONTACT KENJIE</h3>
+                <h3>📡 REACH KENJIE</h3>
                 <div class="contact-row">📧 EMAIL: <a href="mailto:kinxkenjiemartinez62@gmail.com">kinxkenjiemartinez62@gmail.com</a></div>
                 <div class="contact-row">📞 PHONE: 09947098814</div>
-                <div class="contact-row">🐙 GITHUB: <a href="#">@kenjie2cool4school</a></div>
+                <div class="contact-row">🐙 GITHUB: <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank">github.com/kinxkenjiemartinez62-cpu</a> / @kenjie2cool4school</div>
                 <div class="contact-row">💬 DISCORD: @VcTomato</div>
                 <div class="contact-row">📘 FACEBOOK: Kinx Kenjie Alt</div>
                 <hr>
-                <input type="text" id="subj" placeholder="Subject">
-                <textarea id="msg" rows="3" placeholder="Atom message..."></textarea>
+                <input type="text" id="subj" placeholder="⚛️ Subject">
+                <textarea id="msg" rows="3" placeholder="Send an atomic message..."></textarea>
                 <button id="sendMsgBtn">⚛️ TRANSMIT</button>
                 <p id="formFeedback" style="margin-top:12px;"></p>
             </div>
         </div>
-        <div class="footer-note">[ Atomic particles repel from cursor | Liquid glass | Scroll enabled ]</div>
+        <div class="footer-note">[ atoms drift forever | repel from cursor | fully scrollable ]</div>
     </div>
 </div>
 
 <script>
-    // ---------- ATOM PARTICLES (nucleus + orbit ring) ----------
+    // ---------- DRIFTING ATOMS (NO RETURN, CONTINUOUS MOVEMENT) ----------
     const canvas = document.getElementById('particleCanvas');
-    let ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     let particles = [];
-    const PARTICLE_COUNT = 65;
-    let mouseX = -1000, mouseY = -1000;
-    const REPEL_RADIUS = 100;
-    const RETURN_SPEED = 0.028;
+    const PARTICLE_COUNT = 70;
+    let mouseX = -10000, mouseY = -10000;
+    const REPEL_RADIUS = 110;
+    const DRIFT_STRENGTH = 0.2;   // random walk intensity
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
 
-    class AtomParticle {
+    class DriftAtom {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.origX = this.x;
-            this.origY = this.y;
-            this.vx = 0;
-            this.vy = 0;
-            this.radius = 5 + Math.random() * 4;
+            this.vx = (Math.random() - 0.5) * 1.2;
+            this.vy = (Math.random() - 0.5) * 1.2;
+            this.radius = 5 + Math.random() * 5;
             this.orbitRadius = this.radius + 3;
-            this.hue = 80 + Math.random() * 40; // green/cyan
+            this.hue = 70 + Math.random() * 50; // green / lime
         }
         update() {
+            // mouse repulsion
             let dx = this.x - mouseX;
             let dy = this.y - mouseY;
             let dist = Math.hypot(dx, dy);
-            if (dist < REPEL_RADIUS) {
+            if (dist < REPEL_RADIUS && dist > 0.1) {
                 let angle = Math.atan2(dy, dx);
-                let force = (REPEL_RADIUS - dist) / REPEL_RADIUS * 2.2;
+                let force = (REPEL_RADIUS - dist) / REPEL_RADIUS * 2.4;
                 this.vx += Math.cos(angle) * force;
                 this.vy += Math.sin(angle) * force;
             }
-            this.vx *= 0.93;
-            this.vy *= 0.93;
+            // random drift (Brownian)
+            this.vx += (Math.random() - 0.5) * DRIFT_STRENGTH;
+            this.vy += (Math.random() - 0.5) * DRIFT_STRENGTH;
+            // damping
+            this.vx *= 0.98;
+            this.vy *= 0.98;
             this.x += this.vx;
             this.y += this.vy;
-            // return to origin
-            this.x += (this.origX - this.x) * RETURN_SPEED;
-            this.y += (this.origY - this.y) * RETURN_SPEED;
-            // boundaries
-            this.x = Math.min(Math.max(this.x, 8), canvas.width - 8);
-            this.y = Math.min(Math.max(this.y, 8), canvas.height - 8);
+            // Wrap around edges (infinite drifting)
+            if (this.x < -20) this.x = canvas.width + 20;
+            if (this.x > canvas.width + 20) this.x = -20;
+            if (this.y < -20) this.y = canvas.height + 20;
+            if (this.y > canvas.height + 20) this.y = -20;
         }
         draw() {
             ctx.save();
-            ctx.shadowBlur = 0;
             // nucleus
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius * 0.65, 0, Math.PI * 2);
+            ctx.arc(this.x, this.y, this.radius * 0.7, 0, Math.PI * 2);
             ctx.fillStyle = `hsl(${this.hue}, 85%, 65%)`;
             ctx.fill();
+            // orbit ring
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.orbitRadius, 0, Math.PI * 2);
             ctx.strokeStyle = `hsl(${this.hue}, 80%, 70%)`;
-            ctx.lineWidth = 1.2;
+            ctx.lineWidth = 1.3;
             ctx.stroke();
-            // orbiting electron dot
-            let angle = Date.now() / 380 * (this.radius % 3 + 1);
+            // orbiting electron 1
+            let angle = Date.now() / 320 * (this.radius % 3 + 1);
             let orbitX = this.x + Math.cos(angle) * this.orbitRadius;
             let orbitY = this.y + Math.sin(angle) * this.orbitRadius;
             ctx.beginPath();
-            ctx.arc(orbitX, orbitY, 2, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(${this.hue + 30}, 90%, 70%)`;
+            ctx.arc(orbitX, orbitY, 2.3, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${this.hue + 20}, 90%, 72%)`;
             ctx.fill();
-            // second electron (faster opposite)
-            let angle2 = angle * 1.7 + Math.PI;
+            // second electron (opposite direction)
+            let angle2 = angle * 1.6 + Math.PI;
             let orbitX2 = this.x + Math.cos(angle2) * (this.orbitRadius - 1);
             let orbitY2 = this.y + Math.sin(angle2) * (this.orbitRadius - 1);
             ctx.beginPath();
-            ctx.arc(orbitX2, orbitY2, 1.6, 0, Math.PI * 2);
-            ctx.fillStyle = `#baff9e`;
+            ctx.arc(orbitX2, orbitY2, 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = `#bcff9e`;
             ctx.fill();
             ctx.restore();
         }
@@ -433,14 +435,14 @@
     function initParticles() {
         particles = [];
         for (let i = 0; i < PARTICLE_COUNT; i++) {
-            particles.push(new AtomParticle());
+            particles.push(new DriftAtom());
         }
     }
 
     function animateParticles() {
         if (!ctx) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "rgba(5, 8, 5, 0.2)";
+        ctx.fillStyle = "rgba(2, 6, 2, 0.2)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         for (let p of particles) {
             p.update();
@@ -449,25 +451,27 @@
         requestAnimationFrame(animateParticles);
     }
 
-    // mouse/touch repulsion
-    function handleMove(clientX, clientY) {
-        let rect = canvas.getBoundingClientRect();
-        let scaleX = canvas.width / rect.width;
-        let scaleY = canvas.height / rect.height;
+    // mouse/touch with correct coordinates
+    function updateMousePosition(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
         if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
             mouseX = (clientX - rect.left) * scaleX;
             mouseY = (clientY - rect.top) * scaleY;
         } else {
-            mouseX = -1000; mouseY = -1000;
+            mouseX = -10000;
+            mouseY = -10000;
         }
     }
-    window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+
+    window.addEventListener('mousemove', (e) => updateMousePosition(e.clientX, e.clientY));
     window.addEventListener('touchmove', (e) => {
         e.preventDefault();
-        if (e.touches[0]) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        if (e.touches[0]) updateMousePosition(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: false });
-    window.addEventListener('touchend', () => { mouseX = -1000; mouseY = -1000; });
-    window.addEventListener('mouseleave', () => { mouseX = -1000; mouseY = -1000; });
+    window.addEventListener('touchend', () => { mouseX = -10000; mouseY = -10000; });
+    window.addEventListener('mouseleave', () => { mouseX = -10000; mouseY = -10000; });
     window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
 
     resizeCanvas();
@@ -481,9 +485,11 @@
     startBtn.addEventListener('click', () => {
         introDiv.style.display = 'none';
         mainDiv.style.display = 'block';
+        // force scroll reflow
+        document.body.style.overflowY = 'auto';
     });
 
-    // tabs (including occupation)
+    // TABS (occupation panel fix)
     const tabs = document.querySelectorAll('.tab-btn');
     const panels = {
         info: document.getElementById('infoPanel'),
@@ -494,39 +500,41 @@
     function activateTab(tabId) {
         tabs.forEach(btn => btn.classList.remove('active'));
         Object.values(panels).forEach(p => { if(p) p.classList.remove('active-panel'); });
-        if (panels[tabId]) panels[tabId].classList.add('active-panel');
-        let activeBtn = Array.from(tabs).find(btn => btn.getAttribute('data-tab') === tabId);
-        if (activeBtn) activeBtn.classList.add('active');
+        if(panels[tabId]) panels[tabId].classList.add('active-panel');
+        const activeBtn = Array.from(tabs).find(btn => btn.getAttribute('data-tab') === tabId);
+        if(activeBtn) activeBtn.classList.add('active');
     }
     tabs.forEach(btn => {
         btn.addEventListener('click', () => {
-            let tab = btn.getAttribute('data-tab');
-            if (tab && panels[tab]) activateTab(tab);
+            const tab = btn.getAttribute('data-tab');
+            if(tab && panels[tab]) activateTab(tab);
         });
     });
 
-    // contact form
+    // Contact form demo
     const sendMsg = document.getElementById('sendMsgBtn');
     const feedbackSpan = document.getElementById('formFeedback');
-    if (sendMsg) {
+    if(sendMsg) {
         sendMsg.addEventListener('click', () => {
-            let subj = document.getElementById('subj')?.value.trim();
-            let msg = document.getElementById('msg')?.value.trim();
-            if (!subj || !msg) {
-                feedbackSpan.innerText = '❌ ERROR: both fields required.';
-                feedbackSpan.style.color = '#ff8888';
-                setTimeout(() => feedbackSpan.innerText = '', 2000);
+            const subj = document.getElementById('subj')?.value.trim();
+            const msg = document.getElementById('msg')?.value.trim();
+            if(!subj || !msg) {
+                feedbackSpan.innerText = '❌ ERROR: both subject & message needed.';
+                feedbackSpan.style.color = '#ffaa88';
+                setTimeout(() => feedbackSpan.innerText = '', 2100);
             } else {
                 feedbackSpan.innerText = '✓ Message sent (demo) — Kenjie will reply!';
-                feedbackSpan.style.color = '#aaffaa';
+                feedbackSpan.style.color = '#baffaa';
                 document.getElementById('subj').value = '';
                 document.getElementById('msg').value = '';
-                setTimeout(() => feedbackSpan.innerText = '', 2500);
+                setTimeout(() => feedbackSpan.innerText = '', 2600);
             }
         });
     }
 
-    // ensure scrolling works on mobile: body overflow auto already, container height auto.
+    // final scroll insurance (mobile)
+    document.body.style.overflowY = 'auto';
+    document.documentElement.style.overflowY = 'auto';
 </script>
 </body>
 </html>
