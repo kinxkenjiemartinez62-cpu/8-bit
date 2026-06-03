@@ -53,6 +53,29 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
+        /* mute button */
+        .mute-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            border: 2px solid #2ecc2e;
+            border-radius: 40px;
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+            transition: 0.1s linear;
+        }
+        .mute-btn:active {
+            transform: scale(0.94);
+        }
+
         .intro-screen {
             text-align: center;
             padding: 40px 20px;
@@ -174,6 +197,12 @@
             border: 1px solid #2ecc2e;
             border-radius: 18px;
             padding: 16px;
+            transition: 0.05s linear;
+        }
+        .project-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
         .project-item h4 {
             color: #ccffcc;
@@ -188,6 +217,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
         .project-img img {
             max-width: 100%;
@@ -208,26 +238,6 @@
         hr { border-color: #2ecc2e; margin: 18px 0; }
         .pixel-list { list-style: none; padding-left: 0; }
         .pixel-list li::before { content: "► "; color: #2ecc2e; }
-        input, textarea {
-            background: rgba(0,0,0,0.7);
-            border: 1px solid #2ecc2e;
-            color: #e0ffe0;
-            padding: 12px;
-            width: 100%;
-            font-family: monospace;
-            border-radius: 16px;
-            margin-top: 8px;
-        }
-        button#sendMsgBtn {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid #0f0;
-            color: #0f0;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: bold;
-            margin-top: 14px;
-            cursor: pointer;
-        }
         .footer-note {
             margin-top: 28px;
             text-align: center;
@@ -239,6 +249,7 @@
         @media (max-width: 640px) {
             .retro-container { padding: 14px; margin: 10px 0; }
             .tab-btn { font-size: 14px; padding: 6px 14px; }
+            .mute-btn { width: 36px; height: 36px; font-size: 20px; top: 12px; right: 12px; }
         }
     </style>
 </head>
@@ -247,6 +258,9 @@
 <canvas id="particleCanvas"></canvas>
 
 <div class="retro-container" id="retroRoot">
+    <!-- mute button (hidden until portfolio starts, but we'll show always but functional after music init) -->
+    <div id="muteButton" class="mute-btn" style="display:none;">🔊</div>
+
     <div id="introScreen" class="intro-screen">
         <div class="pixel-art">█░█ █▀▀ █░█<br>█▀█ █▀▀ ▄▀▄<br>▀░▀ ▀▀▀ ▀░▀</div>
         <h1>⚛️ KENJIE PORTFOLIO ⚛️</h1>
@@ -266,7 +280,7 @@
             <button class="tab-btn" data-tab="contact">📞 CONTACT</button>
         </div>
 
-        <!-- INFO PANEL (ICT, no published games) -->
+        <!-- INFO PANEL -->
         <div id="infoPanel" class="panel active-panel">
             <div class="info-card">
                 <h3>👤 KENJIE MARTINEZ</h3>
@@ -278,7 +292,7 @@
             </div>
         </div>
 
-        <!-- PROJECTS PANEL (with Hypershot added) -->
+        <!-- PROJECTS PANEL with links and Hypershot image -->
         <div id="projectsPanel" class="panel">
             <div class="project-grid">
                 <div class="project-item">
@@ -297,28 +311,30 @@
                 </div>
                 <div class="project-item">
                     <h4>🎮 HYPER SHOT</h4>
-                    <div class="project-img">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23ff6600'/%3E%3Ctext x='20' y='70' fill='white' font-size='16'%3EHYPER SHOT%3C/text%3E%3C/svg%3E" alt="Hypershot preview">
-                    </div>
-                    <p>Co-developed game on Roblox – coding mechanics, UI, animations. Contributed to Hypershot project.</p>
+                    <a href="https://www.roblox.com/games/17516596118/Hypershot" target="_blank" rel="noopener noreferrer">
+                        <div class="project-img">
+                            <img src="noFilter.webp" alt="Hypershot thumbnail">
+                        </div>
+                        <p>Co-developed Roblox game – coding mechanics, UI, animations. Click image to play.</p>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- OCCUPATION PANEL (no false claims, only helping code hypershot) -->
+        <!-- OCCUPATION PANEL (ICT, Hypershot helper) -->
         <div id="occupationPanel" class="panel">
             <div class="info-card">
                 <h3>⚛️ OCCUPATION: ICT STUDENT + HELPER CODER</h3>
                 <ul class="pixel-list">
                     <li>Student at Don Pablo Memorial SHS – ICT strand (graduating 2027)</li>
-                    <li>Roblox scripting & animating (assisted in Hypershot project)</li>
+                    <li>Roblox scripting & animating – assisted in Hypershot project</li>
                     <li>Freelance web dev & AI prototyping</li>
                     <li>Learning full-stack development</li>
                 </ul>
             </div>
         </div>
 
-        <!-- CONTACT PANEL -->
+        <!-- CONTACT PANEL (no send message form, only contact info) -->
         <div id="contactPanel" class="panel">
             <div class="info-card">
                 <h3>📡 REACH KENJIE</h3>
@@ -327,19 +343,51 @@
                 <div class="contact-row">🐙 GITHUB: <a href="https://github.com/kinxkenjiemartinez62-cpu" target="_blank">github.com/kinxkenjiemartinez62-cpu</a> / @kenjie2cool4school</div>
                 <div class="contact-row">💬 DISCORD: @VcTomato</div>
                 <div class="contact-row">📘 FACEBOOK: Kinx Kenjie Alt</div>
-                <hr>
-                <input type="text" id="subj" placeholder="Subject">
-                <textarea id="msg" rows="3" placeholder="Send a message..."></textarea>
-                <button id="sendMsgBtn">📨 TRANSMIT</button>
-                <p id="formFeedback" style="margin-top:12px;"></p>
+                <!-- no form, no send button -->
             </div>
         </div>
-        <div class="footer-note">[ liquid glass | scroll enabled | atoms repel from cursor ]</div>
+        <div class="footer-note">[ liquid glass | scroll enabled | atoms repel from cursor | music by Stardust ]</div>
     </div>
 </div>
 
+<!-- audio element -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="stardust-music-sounds-better-with-you.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
 <script>
-    // DRIFTING ATOMS (no scroll block)
+    // ---------- MUSIC HANDLER with mute button ----------
+    const audio = document.getElementById('bgMusic');
+    const muteBtn = document.getElementById('muteButton');
+    let musicStarted = false;
+    let isMuted = false;
+
+    function startMusic() {
+        if (!musicStarted) {
+            audio.play().then(() => {
+                musicStarted = true;
+                muteBtn.style.display = 'flex';
+            }).catch(e => console.log("Autoplay prevented, user interaction needed"));
+        }
+    }
+
+    function toggleMute() {
+        if (!musicStarted) return;
+        if (isMuted) {
+            audio.volume = 1.0;
+            muteBtn.innerHTML = '🔊';
+            isMuted = false;
+        } else {
+            audio.volume = 0.0;
+            muteBtn.innerHTML = '🔇';
+            isMuted = true;
+        }
+    }
+
+    muteBtn.addEventListener('click', toggleMute);
+
+    // ---------- DRIFTING ATOMS (no scroll block) ----------
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -451,16 +499,23 @@
     initParticles();
     animateParticles();
 
-    // PORTFOLIO UI
+    // ---------- PORTFOLIO UI + start music on user interaction ----------
     const introDiv = document.getElementById('introScreen');
     const mainDiv = document.getElementById('mainPortfolio');
     const startBtn = document.getElementById('startBtn');
-    startBtn.addEventListener('click', () => {
+
+    function startPortfolio() {
         introDiv.style.display = 'none';
         mainDiv.style.display = 'block';
         document.body.style.overflowY = 'auto';
         document.documentElement.style.overflowY = 'auto';
-    });
+        startMusic();  // attempts to play music after user click
+    }
+
+    startBtn.addEventListener('click', startPortfolio);
+
+    // also if user clicks anywhere else (tab, etc) after intro, but we already have start. 
+    // additional safety: any click on portfolio after start will not restart music.
 
     const tabs = document.querySelectorAll('.tab-btn');
     const panels = {
@@ -482,26 +537,6 @@
             if(tab && panels[tab]) activateTab(tab);
         });
     });
-
-    const sendMsg = document.getElementById('sendMsgBtn');
-    const feedbackSpan = document.getElementById('formFeedback');
-    if(sendMsg) {
-        sendMsg.addEventListener('click', () => {
-            const subj = document.getElementById('subj')?.value.trim();
-            const msg = document.getElementById('msg')?.value.trim();
-            if(!subj || !msg) {
-                feedbackSpan.innerText = '❌ ERROR: both subject & message needed.';
-                feedbackSpan.style.color = '#ffaa88';
-                setTimeout(() => feedbackSpan.innerText = '', 2100);
-            } else {
-                feedbackSpan.innerText = '✓ Message sent (demo) — Kenjie will reply!';
-                feedbackSpan.style.color = '#baffaa';
-                document.getElementById('subj').value = '';
-                document.getElementById('msg').value = '';
-                setTimeout(() => feedbackSpan.innerText = '', 2600);
-            }
-        });
-    }
 
     document.body.style.overflowY = 'auto';
     document.documentElement.style.overflowY = 'auto';
