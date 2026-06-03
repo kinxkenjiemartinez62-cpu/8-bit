@@ -251,17 +251,32 @@
         .pixel-list { list-style: none; padding-left: 0; }
         .pixel-list li::before { content: "► "; color: #2ecc2e; }
 
+        /* Easter egg area with gif + rocket */
         .easter-egg {
             text-align: center;
             margin-top: 30px;
             cursor: pointer;
             transition: transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
-        .easter-egg:active { transform: scale(0.9); }
+        .easter-egg:active {
+            transform: scale(0.95);
+        }
         .spaceship-icon {
             font-size: 42px;
             filter: drop-shadow(0 0 4px #0f0);
             display: inline-block;
+        }
+        .egg-gif {
+            width: 48px;
+            height: auto;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 2px #0f0);
         }
 
         .game-overlay {
@@ -329,6 +344,7 @@
             .tab-btn { font-size: 14px; padding: 6px 14px; }
             .mute-btn { width: 36px; height: 36px; font-size: 20px; top: 12px; right: 12px; }
             .spaceship-icon { font-size: 32px; }
+            .egg-gif { width: 36px; }
             .ctrl-btn { font-size: 24px; padding: 8px 16px; min-width: 70px; }
         }
     </style>
@@ -414,13 +430,16 @@
             </div>
         </div>
 
+        <!-- EASTER EGG: spaceship + gif -->
         <div class="easter-egg" id="spaceshipEgg">
-            <div class="spaceship-icon">🛸✨</div>
+            <div class="spaceship-icon">🛸</div>
+            <img src="download.gif" alt="easter egg gif" class="egg-gif" id="eggGif">
+            <div class="spaceship-icon">✨</div>
         </div>
     </div>
 </div>
 
-<!-- MINI GAME OVERLAY with HEALTH -->
+<!-- MINI GAME OVERLAY -->
 <div id="gameOverlay" class="game-overlay">
     <canvas id="gameCanvas" class="game-canvas" width="800" height="500"></canvas>
     <div class="game-controls">
@@ -604,8 +623,8 @@
     }
 
     function spawnMeteor() {
-        let size = 18 + Math.random() * 18;  // slightly smaller
-        let speed = 1.2 + Math.random() * 2.0; // slower: 1.2 to 3.2
+        let size = 18 + Math.random() * 18;
+        let speed = 1.2 + Math.random() * 2.0;
         meteors.push({
             x: Math.random() * (gameCanvas.width - size),
             y: -size,
@@ -617,22 +636,18 @@
 
     function updateGame() {
         if (!gameRunning) return;
-        // movement
         if (leftPressed && ship.x > 5) ship.x -= 6;
         if (rightPressed && ship.x < gameCanvas.width - ship.width - 5) ship.x += 6;
-        // shooting
         if (shootCooldown <= 0 && shootPressed) {
             bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, w: 6, h: 12 });
             shootCooldown = 12;
         }
         if (shootCooldown > 0) shootCooldown--;
 
-        // bullets
         for(let i=0; i<bullets.length; i++) {
             bullets[i].y -= 8;
             if(bullets[i].y + bullets[i].h < 0) bullets.splice(i,1);
         }
-        // meteors update + bottom damage
         for(let i=0; i<meteors.length; i++) {
             meteors[i].y += meteors[i].speed;
             if(meteors[i].y > gameCanvas.height + 50) {
@@ -656,7 +671,7 @@
                 }
             }
         }
-        // collision ship vs meteors (deduct health, remove meteor)
+        // collision ship vs meteors
         for(let i=0; i<meteors.length; i++) {
             let m = meteors[i];
             if(ship.x < m.x+m.width && ship.x+ship.width > m.x && ship.y < m.y+m.height && ship.y+ship.height > m.y) {
@@ -667,7 +682,6 @@
                 i--;
             }
         }
-        // keep meteor count ~6
         while(meteors.length < 6) spawnMeteor();
         drawGame();
         animationId = requestAnimationFrame(updateGame);
@@ -682,10 +696,8 @@
 
     function drawGame() {
         ctxGame.clearRect(0,0,gameCanvas.width,gameCanvas.height);
-        // stars
         ctxGame.fillStyle = "#fff";
         for(let i=0;i<100;i++) ctxGame.fillRect((i*23)%gameCanvas.width, (i*7)%gameCanvas.height, 1,1);
-        // ship
         ctxGame.fillStyle = "#0f0";
         ctxGame.beginPath();
         ctxGame.moveTo(ship.x+ship.width/2, ship.y);
@@ -694,17 +706,14 @@
         ctxGame.fill();
         ctxGame.fillStyle = "#ff0";
         ctxGame.fillRect(ship.x+12, ship.y-4, 8, 6);
-        // bullets
         ctxGame.fillStyle = "#f00";
         for(let b of bullets) ctxGame.fillRect(b.x, b.y, b.w, b.h);
-        // meteors
         for(let m of meteors) {
             ctxGame.fillStyle = "#a55";
             ctxGame.fillRect(m.x, m.y, m.width, m.height);
             ctxGame.fillStyle = "#744";
             ctxGame.fillRect(m.x+4, m.y+4, m.width-8, m.height-8);
         }
-        // UI
         ctxGame.font = "20px 'Courier New'";
         ctxGame.fillStyle = "#0f0";
         ctxGame.fillText("SCORE: "+score, 10, 30);
@@ -724,7 +733,6 @@
         updateGame();
     }
 
-    // Button listeners
     leftBtn.addEventListener('mousedown', (e) => { e.preventDefault(); leftPressed = true; });
     leftBtn.addEventListener('mouseup', () => { leftPressed = false; });
     leftBtn.addEventListener('mouseleave', () => { leftPressed = false; });
